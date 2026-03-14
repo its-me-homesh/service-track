@@ -84,7 +84,7 @@ export default function ActionsDropdown({
                                 className="flex items-center gap-2"
                             >
                                 <Eye className="h-5 w-5 text-sky-600" />
-                                <span className="text-sky-600">View</span>
+                                <span className="text-sky-600">View </span>
                             </Link>
                         </DropdownMenuItem>
                     )}
