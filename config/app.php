@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'description' => env('APP_DESCRIPTION', 'Laravel'),
+
 ];

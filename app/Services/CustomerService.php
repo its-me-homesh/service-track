@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Actions\Customer\CreateCustomerAction;
 use App\Actions\Customer\DeleteCustomerAction;
 use App\Actions\Customer\UpdateCustomerAction;
+use App\Actions\Customer\UpdateServiceScheduleAction;
 use App\Models\Customer;
 use App\Repositories\CustomerRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -13,10 +14,11 @@ class CustomerService
 {
 
     public function __construct(
-        private CreateCustomerAction $createCustomerAction,
-        private UpdateCustomerAction $updateCustomerAction,
-        private DeleteCustomerAction $deleteCustomerAction,
-        private CustomerRepository   $customerRepository
+        private readonly CreateCustomerAction        $createCustomerAction,
+        private readonly UpdateCustomerAction        $updateCustomerAction,
+        private readonly DeleteCustomerAction        $deleteCustomerAction,
+        private readonly UpdateServiceScheduleAction $updateServiceScheduleAction,
+        private readonly CustomerRepository          $customerRepository
     )
     {
     }
@@ -48,5 +50,15 @@ class CustomerService
     public function restore(int $id): bool
     {
         return $this->customerRepository->restoreById($id);
+    }
+
+    public function find(int $id, array $with = []): ?Customer
+    {
+        return $this->customerRepository->findById($id, true)->loadMissing($with);
+    }
+
+    public function updateServiceSchedule(int $id, array $data): ?Customer
+    {
+        return $this->updateServiceScheduleAction->execute($id, $data);
     }
 }

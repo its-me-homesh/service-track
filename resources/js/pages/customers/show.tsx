@@ -1,234 +1,156 @@
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
+import { index as customersIndex } from '@/routes/customers';
+import { type BreadcrumbItem, Customer } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 
-import {
-    Eye,
-    Phone,
-    Mail,
-} from 'lucide-react';
+import { Search, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { services } from '@/routes';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card } from '@/components/ui/card';
+import CustomerFormCard from '@/components/customers/customer-form-card';
+import CustomerAdvancedServiceSettingsForm from '@/components/customers/advance-service-settings-form';
+import ActionsDropdown from '@/components/customers/actions-dropdown';
+import { DataTable, DataTableColumn } from '@/components/ui/data-table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Customers',
-        href: dashboard().url,
+        href: customersIndex().url,
+    },
+    {
+        title: 'Customer Details & Recent Services',
+        href: customersIndex().url,
     },
 ];
 
-export default function Customers({serviceDueInNextSeveralDays}: Array<object> | undefined = []) {
+export default function CustomerDetails({customer}: {customer: Customer}) {
+
+    const columns: DataTableColumn<Customer>[] = [
+        {
+            key: 'name',
+            header: 'Customer',
+            accessorKey: 'name',
+            headerClassName: 'py-3',
+            cellClassName: 'text-heading whitespace-nowrap',
+            isRowHeader: true,
+        },
+        {
+            key: 'assigned_to_id',
+            header: 'Assignee',
+            accessorKey: 'assignedTo',
+        },
+        {
+            key: 'service_date',
+            header: 'service Date',
+            accessorKey: 'serviceDate',
+        },
+        {
+            key: 'status',
+            header: 'Status',
+            accessorKey: 'status',
+        },
+        {
+            key: 'created_by_id',
+            header: 'Created By',
+            accessorKey: 'createdBy',
+        },
+        {
+            key: 'updated_by_id',
+            header: 'Updated By',
+            accessorKey: 'updatedBy',
+        },
+        {
+            key: 'actions',
+            header: 'Actions',
+            cell: (customer) => <ActionsDropdown customer={customer} />,
+        },
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Customers" />
-
+            <Head title="Customer Details & Recent Services" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative flex-1 overflow-hidden">
-                    <div className="flex items-center justify-between py-4 px-0">
-                        <label htmlFor="input-group-1" className="sr-only">
-                            Search
-                        </label>
-                        <div className="relative">
-                            <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                                <svg
-                                    className="text-body h-4 w-4"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-width="2"
-                                        d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-                                    />
-                                </svg>
-                            </div>
-                            <input
-                                type="text"
-                                id="input-group-1"
-                                className="bg-neutral-secondary-medium border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand placeholder:text-body block w-full max-w-96 border py-2 ps-9 pe-3 text-sm shadow-xs"
-                                placeholder="Search"
+                    <div className="flex items-center justify-end gap-2 px-1 py-1">
+                        <ActionsDropdown
+                            customer={customer}
+                            context="details"
+                        />
+                        <Button variant="default">Add Service</Button>
+                    </div>
+
+                    <div className="mt-2 px-1">
+                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                            <CustomerFormCard
+                                className="col-span-1 lg:col-span-2"
+                                selectedCustomer={customer}
                             />
-                        </div>
-                        <button className="bg-gray-800">
-                            Filter
-                        </button>
-
-                    </div>
-
-                    <div className="relative rounded-md bg-gray-100 px-0 text-gray-600 shadow dark:bg-gray-800 dark:text-gray-100">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-sm">
-                                <thead className="rounded-lg bg-gray-600 text-sm font-bold text-gray-100 dark:bg-gray-100 dark:text-gray-600">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            className="px-2 py-3 text-xs font-medium uppercase"
-                                        >
-                                            Customer
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-2 py-1 text-xs font-medium uppercase"
-                                        >
-                                            Contact
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-2 py-1 text-xs font-medium uppercase"
-                                        >
-                                            Installation Date
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-2 py-1 text-xs font-medium uppercase"
-                                        >
-                                            Last Service Date
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-2 py-1 text-xs font-medium uppercase"
-                                        >
-                                            Next Service Date
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-2 py-1 text-xs font-medium uppercase"
-                                        >
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {serviceDueInNextSeveralDays?.map(
-                                        (customer: object, index: number) => (
-                                            <tr
-                                                className={`${index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-700'}`}
-                                            >
-                                                <th
-                                                    scope="row"
-                                                    className="text-heading px-2 py-1 font-medium whitespace-nowrap"
-                                                >
-                                                    <div className="flex items-center justify-start gap-2">
-                                                        {customer.name}
-                                                    </div>
-                                                    <div className="text-xs">
-                                                        {customer.address}
-                                                    </div>
-                                                </th>
-                                                <td className="px-2 py-1">
-                                                    <div className="flex items-center justify-start gap-2">
-                                                        <div className="text-md flex items-center gap-1">
-                                                            <Phone className="h-4 w-4" />
-                                                            <span className="">
-                                                                {
-                                                                    customer.contact_number
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    {customer.email && (
-                                                        <div className="flex items-center justify-start gap-2">
-                                                            <div className="text-sx flex items-center gap-1">
-                                                                <Mail className="h-4 w-4" />
-                                                                <span className="">
-                                                                    {
-                                                                        customer.email
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className="px-2 py-1">
-                                                    {customer.installation_date}
-                                                </td>
-                                                <td className="px-2 py-1">
-                                                    {customer.last_service_date}
-                                                </td>
-                                                <td className="px-2 py-1">
-                                                    {customer.next_service_date}
-                                                </td>
-                                                <td className="px-2 py-1">
-                                                    <Link
-                                                        href={`/customers/${customer.id}`}
-                                                    >
-                                                        <Eye className="h-4 w-4 text-blue-500 hover:text-blue-300" />
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        ),
-                                    )}
-                                </tbody>
-                            </table>
+                            <div className="col-span-1">
+                                <Card className="py-0">
+                                    <Tabs defaultValue="activity-log">
+                                        <TabsList className="rounded-b-none">
+                                            <TabsTrigger value="advanced-service-settings">
+                                                Advanced Service Settings
+                                            </TabsTrigger>
+                                            <TabsTrigger value="activity-log">
+                                                Activity Log
+                                            </TabsTrigger>
+                                        </TabsList>
+                                        <TabsContent value="advanced-service-settings">
+                                            <CustomerAdvancedServiceSettingsForm
+                                                selectedCustomer={customer}
+                                            />
+                                        </TabsContent>
+                                        <TabsContent value="activity-log">
+                                            Activity Log
+                                        </TabsContent>
+                                    </Tabs>
+                                </Card>
+                            </div>
                         </div>
                     </div>
-                    <div className="mt-4 flex items-center justify-between px-2">
-                        <div>Showing 1 to 10 of 100 Entries</div>
-                        <nav aria-label="Page navigation example">
-                            <ul className="flex -space-x-px text-sm">
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading rounded-s-base box-border flex h-9 items-center justify-center border px-3 text-sm font-medium focus:outline-none"
+
+                    <div className="relative rounded-md mt-2">
+                        <div className="px-1 py-2">
+                            <div className="flex items-center justify-between gap-2">
+                                <div>
+                                    <Input
+                                        placeholder="Search"
+                                        prefixIcon={
+                                            <Search className="h-4 w-4" />
+                                        }
+                                    />
+                                </div>
+
+                                <div className="flex items-center justify-end gap-2">
+                                    <Link
+                                        href={`${services().url}?customerId=${customer.id}`}
+                                        className="flex items-center justify-end gap-2 text-sm text-blue-500 uppercase"
                                     >
-                                        Previous
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading box-border flex h-9 w-9 items-center justify-center border text-sm font-medium focus:outline-none"
-                                    >
-                                        1
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading box-border flex h-9 w-9 items-center justify-center border text-sm font-medium focus:outline-none"
-                                    >
-                                        2
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        aria-current="page"
-                                        className="text-fg-brand bg-neutral-tertiary-medium border-default-medium hover:text-fg-brand box-border flex h-9 w-9 items-center justify-center border text-sm font-medium focus:outline-none"
-                                    >
-                                        3
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading box-border flex h-9 w-9 items-center justify-center border text-sm font-medium focus:outline-none"
-                                    >
-                                        4
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading box-border flex h-9 w-9 items-center justify-center border text-sm font-medium focus:outline-none"
-                                    >
-                                        5
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading rounded-e-base box-border flex h-9 items-center justify-center border px-3 text-sm font-medium focus:outline-none"
-                                    >
-                                        Next
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <ExternalLink className="h-4 w-4" />
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                Click this link to view all
+                                                services for this customer.
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                        <DataTable
+                            columns={columns}
+                            data={[]}
+                            rowClassName={(_, index) =>
+                                index % 2 === 0 ? 'bg-sidebar' : 'bg-background'
+                            }
+                            getRowKey={(service) => service.id}
+                        />
                     </div>
                 </div>
             </div>

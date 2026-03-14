@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Customer;
 
-use App\Models\Customer;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -12,7 +12,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', Customer::class);
+        return true;
     }
 
     /**
@@ -25,13 +25,24 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'contactNumber' => 'required|string|max:255',
+            'alternateContactNumber' => 'nullable|string|max:255',
             'email' => 'nullable|string|max:255',
             'address' => 'required|string|max:255',
             'productModel' => 'required|string|max:255',
-            'installationDate' => 'required|string|max:255',
-            'serviceInterval' => 'nullable|numeric|min:1|max:365',
+            'installationDate' => 'required|date_format:Y-m-d',
+            'serviceInterval' => 'nullable|numeric|min:1|max:1826',
+            'notes' => 'nullable|string',
             'lastServiceDate' => 'nullable|date_format:Y-m-d',
-            'nextServiceDate' => 'nullable|date_format:Y-m-d',
+            'advanceServiceSettings' => 'nullable|boolean',
+            'autoCalculateNextServiceDate' => 'nullable|boolean',
+            'nextServiceDate' => [
+                'nullable',
+                'date_format:Y-m-d',
+                Rule::requiredIf(
+                    fn () => $this->boolean('advanceServiceSettings')
+                        && !$this->boolean('autoCalculateNextServiceDate')
+                ),
+            ],
         ];
     }
 }

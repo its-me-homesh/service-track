@@ -18,9 +18,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('customers')->as('customers.')->group(function () {
         Route::get('', [\App\Http\Controllers\Customer\CustomerController::class, 'index'])->name('index');
         Route::post('', [\App\Http\Controllers\Customer\CustomerController::class, 'store'])->name('store');
+        Route::get('{id}', [\App\Http\Controllers\Customer\CustomerController::class, 'show'])->name('view');
         Route::put('{id}', [\App\Http\Controllers\Customer\CustomerController::class, 'update'])->name('update');
         Route::delete('{id}', [\App\Http\Controllers\Customer\CustomerController::class, 'delete'])->name('delete');
         Route::patch('{id}/restore', [\App\Http\Controllers\Customer\CustomerController::class, 'restore'])->name('restore');
+        Route::patch('{id}/update-service-schedule', [\App\Http\Controllers\Customer\CustomerController::class, 'updateServiceSchedule'])->name('update-service-schedule');
     });
 
     Route::prefix('services')->as('services')->group(function () {

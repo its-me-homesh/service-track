@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Customer;
 
 use App\Enums\ModelDeleteType;
-use App\Enums\StatusDeleteType;
-use App\Models\Customer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +13,7 @@ class DeleteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('delete', Customer::class);
+        return true;
     }
 
     /**

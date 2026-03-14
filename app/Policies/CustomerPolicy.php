@@ -14,7 +14,7 @@ class CustomerPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can(CustomerPermission::LIST->value);
+        return $user->can('customer.'.CustomerPermission::LIST->value);
     }
 
     /**
@@ -22,7 +22,7 @@ class CustomerPolicy
      */
     public function view(User $user): bool
     {
-        return $user->can(CustomerPermission::VIEW->value);
+        return $user->can('customer.'.CustomerPermission::VIEW->value);
     }
 
     /**
@@ -30,7 +30,7 @@ class CustomerPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can(CustomerPermission::CREATE->value);
+        return $user->can('customer.'.CustomerPermission::CREATE->value);
     }
 
     /**
@@ -38,7 +38,7 @@ class CustomerPolicy
      */
     public function update(User $user): bool
     {
-        return $user->can(CustomerPermission::UPDATE->value);
+        return $user->can('customer.'.CustomerPermission::UPDATE->value);
     }
 
     /**
@@ -46,7 +46,7 @@ class CustomerPolicy
      */
     public function delete(User $user): bool
     {
-        return $user->can(CustomerPermission::DELETE->value);
+        return $user->can('customer.'.CustomerPermission::DELETE->value);
     }
 
     /**
@@ -54,7 +54,7 @@ class CustomerPolicy
      */
     public function restore(User $user): bool
     {
-        return $user->can(CustomerPermission::RESTORE->value);
+        return $user->can('customer.'.CustomerPermission::RESTORE->value);
     }
 
     /**
@@ -62,6 +62,11 @@ class CustomerPolicy
      */
     public function forceDelete(User $user): bool
     {
-        return $user->can(CustomerPermission::FORCE_DELETE->value);
+        return $user->can('customer.'.CustomerPermission::FORCE_DELETE->value);
+    }
+
+    public function updateServiceSchedule(User $user): bool
+    {
+        return $user->can('customer.'.CustomerPermission::UPDATE_SERVICE_SCHEDULE->value);
     }
 }

@@ -15,15 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('contact_number', 15);
+            $table->string('alternate_contact_number', 15)->nullable();
             $table->string('email')->nullable();
             $table->text('address')->nullable();
             $table->string('product_model')->nullable();
             $table->date('installation_date')->nullable();
             $table->unsignedSmallInteger('service_interval')->default(365)->index();
+            $table->text('notes')->nullable();
             $table->date('last_service_date')->nullable()->index();
             $table->date('next_service_date')->nullable()->index();
             $table->foreignId('created_by_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('updated_by_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('deleted_by_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

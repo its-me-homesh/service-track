@@ -4,13 +4,14 @@ namespace App\Enums\Permissions;
 
 enum CustomerPermission: string
 {
-    case CREATE = 'customer.create';
-    case UPDATE = 'customer.update';
-    case LIST = 'customer.list';
-    case VIEW = 'customer.view';
-    case DELETE = 'customer.delete';
-    case FORCE_DELETE = 'customer.force-delete';
-    case RESTORE = 'customer.restore';
+    case CREATE = 'create';
+    case UPDATE = 'update';
+    case LIST = 'list';
+    case VIEW = 'view';
+    case DELETE = 'delete';
+    case FORCE_DELETE = 'force-delete';
+    case RESTORE = 'restore';
+    case UPDATE_SERVICE_SCHEDULE = 'update-service-schedule';
 
     public static function values(): array
     {

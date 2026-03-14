@@ -1,5 +1,6 @@
 import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
+import React from 'react';
 
 export interface Auth {
     user: User;
@@ -46,11 +47,13 @@ export interface Customer {
     id: number;
     name: string;
     contactNumber: string;
+    alternateContactNumber: string;
     email: string;
     address: string;
     productModel: string;
     installationDate: string;
     serviceInterval: number;
+    notes: string;
     lastServiceDate: string;
     nextServiceDate: string;
     createdById: number;
@@ -59,7 +62,39 @@ export interface Customer {
     updatedBy: User | null;
     createdAt: string;
     updatedAt: string;
+    deletedAt: string;
     [key: string]: unknown;
+}
+
+export interface CustomerFormData {
+    name: string;
+    contactNumber: string;
+    alternateContactNumber: string;
+    email: string;
+    address: string;
+    productModel: string;
+    installationDate: string;
+    serviceInterval: number;
+    notes: string;
+    lastServiceDate: string;
+    nextServiceDate: string;
+    advanceServiceSettings?: boolean;
+    autoCalculateNextServiceDate?: boolean;
+}
+
+export interface CustomerAdvancedServiceSettingsFormData {
+    customerId?: number | null;
+    serviceInterval: number;
+    lastServiceDate: string;
+    nextServiceDate: string;
+    autoCalculateNextServiceDate?: boolean;
+}
+
+export interface CustomerFilters {
+    includeTrashed: boolean;
+    onlyTrashed: boolean;
+    serviceOverdue: boolean;
+    serviceDue: boolean;
 }
 
 export interface ServiceCounts{
@@ -108,4 +143,22 @@ export type PaginatedData<T> = {
 export type TableHeader<T> = {
     label: string;
     key: keyof T;
+};
+
+export interface InputProps extends React.ComponentProps<'input'> {
+    prefixIcon?: React.ReactNode;
+}
+
+export interface TextareaProps extends React.ComponentProps<'textarea'> {
+    prefixIcon?: React.ReactNode;
+}
+
+export type ConfirmDialogProps = {
+    open: boolean;
+    title?: string;
+    description?: string;
+    cancelLabel?: string;
+    confirmLabel?: string;
+    onConfirm?: () => void;
+    onCancel?: () => void;
 };

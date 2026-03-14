@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Contacts;
+namespace App\Repositories\Contracts;
 
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Collection;
