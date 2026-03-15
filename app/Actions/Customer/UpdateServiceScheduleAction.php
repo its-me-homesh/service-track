@@ -16,10 +16,8 @@ class UpdateServiceScheduleAction
 
     }
 
-    public function execute(int $id, array $data): ?Customer
+    public function execute(Customer $customer, array $data): ?Customer
     {
-        $customer = $this->customerRepository->findById($id, true);
-
         $interval = $customer->service_interval ?? 365;
         $baseDateString = $data['lastServiceDate'] ?? $customer->installation_date ?? null;
         if ($data['autoCalculateNextServiceDate']) {
@@ -28,7 +26,7 @@ class UpdateServiceScheduleAction
             $nextServiceDate = $data['nextServiceDate'] ?? null;
         }
 
-        return $this->customerRepository->updateById($id, [
+        return $this->customerRepository->update($customer, [
             'last_service_date' => $data['lastServiceDate'] ?? null,
             'next_service_date' => $nextServiceDate
         ]);

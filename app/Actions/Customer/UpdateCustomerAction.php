@@ -14,11 +14,11 @@ class UpdateCustomerAction
 
     }
 
-    public function execute(int $id, array $data): ?Customer
+    public function execute(Customer $customer, array $data): ?Customer
     {
-        $interval = $data['serviceInterval'] ?? 365;
+        $interval = $data['serviceInterval'] ?? $customer->service_interval ?? 365;
 
-        return $this->customerRepository->updateById($id, [
+        return $this->customerRepository->update($customer, [
             'name' => $data['name'],
             'contact_number' => $data['contactNumber'],
             'alternate_contact_number' => $data['alternateContactNumber'] ?? null,

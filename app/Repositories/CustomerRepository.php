@@ -13,7 +13,7 @@ class CustomerRepository implements CustomerRepositoryInterface
 {
     /**
      * A whitelist of columns that are safe to be sorted by.
-     * This prevents arbitrary sorting on sensitive or un-indexed columns.
+     * This prevents arbitrary sorting on sensitive or unindexed columns.
      * @var array
      */
     private array $sortable = [
@@ -33,10 +33,10 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     public function all(array $params = []): Collection{
         $searchTerm = $params['term'] ?? '';
-        $withTrashed = $params['withTrashed'] ?? false;
+        $includeTrashed = $params['includeTrashed'] ?? false;
         $onlyTrashed = $params['onlyTrashed'] ?? false;
         return Customer::when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], 'like', '%' . $searchTerm . '%'))
-            ->when($withTrashed, fn($query) => $query->withTrashed())
+            ->when($includeTrashed, fn($query) => $query->withTrashed())
             ->when($onlyTrashed, fn($query) => $query->onlyTrashed())
             ->get();
     }
@@ -79,32 +79,20 @@ class CustomerRepository implements CustomerRepositoryInterface
         return Customer::create($data);
     }
 
-    public function updateById(int $id, array $data): ?Customer
+    public function update(Customer $customer, array $data): ?Customer
     {
-        $customer = $this->findById($id);
         $customer->update($data);
-        return $customer;
+        return $customer->fresh();
     }
 
-    public function deleteById(int $id, bool $hardDelete = false): bool
+    public function delete(Customer $customer, bool $hardDelete = false): bool
     {
-        $model = $this->findById($id, true);
-        if (!$model) {
-            return false;
-        }
-        if (!$hardDelete) {
-            return $model->delete();
-        }
 
-        return $model->forceDelete();
+        return $hardDelete ? $customer->forceDelete() : $customer->delete();
     }
 
-    public function restoreById(int $id): bool
+    public function restore(Customer $customer): bool
     {
-        $model = $this->findById($id, true);
-        if (!$model) {
-            return false;
-        }
-        return $model->restore();
+        return $customer->restore();
     }
 }

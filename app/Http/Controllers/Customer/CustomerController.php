@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Enums\ModelDeleteType;
+use App\Enums\Permissions\CustomerPermission;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\DeleteRequest;
 use App\Http\Requests\Customer\StoreRequest;
@@ -22,7 +24,7 @@ class CustomerController extends Controller
 
     public function index()
     {
-        \Gate::authorize('view-any', Customer::class);
+        $this->authorize(CustomerPermission::VIEW_ANY->value, Customer::class);
         $customers = new CustomerCollection($this->customerService->pagination(request()->all())->appends(request()->all()));
 
         return Inertia::render('customers/index',[
@@ -32,16 +34,16 @@ class CustomerController extends Controller
 
     public function show(int $id)
     {
-        \Gate::authorize('view', Customer::class);
-        $customer = CustomerResource::make($this->customerService->find($id))->resolve();
+        $customer = $this->customerService->findById($id);
+        $this->authorize(CustomerPermission::VIEW->value, $customer);
         return Inertia::render('customers/show',[
-            'customer' => $customer
+            'customer' => CustomerResource::make($customer)->resolve()
         ]);
     }
 
     public function store(StoreRequest $request)
     {
-        \Gate::authorize('create', Customer::class);
+        $this->authorize(CustomerPermission::CREATE->value, Customer::class);
         $this->customerService->create($request->validated());
         return redirect()
             ->route('customers.index')
@@ -50,24 +52,26 @@ class CustomerController extends Controller
 
     public function update(UpdateRequest $request, int $id)
     {
-        \Gate::authorize('update', Customer::class);
-        $this->customerService->update($id, $request->validated());
+        $customer = $this->customerService->findById($id);
+        $this->authorize(CustomerPermission::UPDATE->value, $customer);
+        $this->customerService->update($customer, $request->validated());
         return back()->with('success', 'Customer details updated successfully.');
     }
 
     public function delete(DeleteRequest $request, int $id)
     {
         $validatedData = $request->validated();
+        $customer = $this->customerService->findById($id);
 
-        if (($validatedData['type'] ?? null) === 'permanent') {
-            \Gate::authorize('force-delete', Customer::class);
+        if (($validatedData['type'] ?? null) === ModelDeleteType::PERMANENTLY->value) {
+            $this->authorize(CustomerPermission::FORCE_DELETE->value, $customer);
             $forceDelete = true;
         } else {
-            \Gate::authorize('delete', Customer::class);
+            $this->authorize(CustomerPermission::DELETE->value, $customer);
             $forceDelete = false;
         }
 
-        $this->customerService->delete($id, $forceDelete);
+        $this->customerService->delete($customer, $forceDelete);
         $message = 'Customer deleted'.($validatedData['type'] === 'permanent' ? ' permanently' : '').' successfully.';
         return $forceDelete
             ? redirect()->route('customers.index')->with('success', $message)
@@ -76,15 +80,17 @@ class CustomerController extends Controller
 
     public function restore(int $id)
     {
-        \Gate::authorize('restore', Customer::class);
-        $this->customerService->restore($id);
+        $customer = $this->customerService->findById($id);
+        $this->authorize(CustomerPermission::RESTORE->value, $customer);
+        $this->customerService->restore($customer);
         return back()->with('success', 'Customer record is restored successfully.');
     }
 
     public function updateServiceSchedule(UpdateServiceScheduleRequest $request, int $id)
     {
-        \Gate::authorize('update-service-schedule', Customer::class);
-        $this->customerService->updateServiceSchedule($id, $request->validated());
+        $customer = $this->customerService->findById($id);
+        $this->authorize(CustomerPermission::UPDATE_SERVICE_SCHEDULE->value, $customer);
+        $this->customerService->updateServiceSchedule($customer, $request->validated());
         return back()->with('success', 'Customer service schedule settings updated successfully.');
     }
 }

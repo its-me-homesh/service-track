@@ -2,24 +2,19 @@
 
 namespace App\Enums\Permissions;
 
-enum CustomerPermission: string
+enum ServicePermission: string
 {
     case CREATE = 'create';
     case UPDATE = 'update';
-    case VIEW_ANY = 'view-any';
+    case LIST = 'list';
     case VIEW = 'view';
     case DELETE = 'delete';
     case FORCE_DELETE = 'force-delete';
     case RESTORE = 'restore';
-    case UPDATE_SERVICE_SCHEDULE = 'update-service-schedule';
+    case UPDATE_SERVICE_SCHEDULE = 'update-status';
 
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
-    }
-
-    public function key(): string
-    {
-        return 'customer.'.$this->value;
     }
 }

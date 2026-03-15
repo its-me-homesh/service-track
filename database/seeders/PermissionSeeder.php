@@ -13,10 +13,8 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = CustomerPermission::values();
-
-        foreach ($permissions as $role) {
-            \Spatie\Permission\Models\Permission::updateOrCreate(['name' => $role]);
+        foreach (CustomerPermission::cases() as $permission) {
+            \Spatie\Permission\Models\Permission::updateOrCreate(['name' => $permission->key()]);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Customer;
 
+use App\Models\Customer;
 use App\Repositories\Contracts\CustomerRepositoryInterface;
 
 class DeleteCustomerAction
@@ -11,8 +12,8 @@ class DeleteCustomerAction
 
     }
 
-    public function execute(int $id, bool $forceDelete = false): bool
+    public function execute(Customer $customer, bool $forceDelete = false): bool
     {
-        return $this->customerRepository->deleteById($id, $forceDelete);
+        return $this->customerRepository->delete($customer, $forceDelete);
     }
 }

@@ -16,9 +16,9 @@ interface CustomerRepositoryInterface
 
     public function create(array $data): Customer;
 
-    public function updateById(int $id, array $data): ?Customer;
+    public function update(Customer $customer, array $data): ?Customer;
 
-    public function deleteById(int $id, bool $hardDelete = false): bool;
+    public function delete(Customer $customer, bool $hardDelete = false): bool;
 
-    public function restoreById(int $id): bool;
+    public function restore(Customer $customer): bool;
 }

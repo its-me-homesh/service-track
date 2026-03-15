@@ -37,28 +37,28 @@ class CustomerService
         return $this->createCustomerAction->execute($data);
     }
 
-    public function update(int $id, array $data): ?Customer
+    public function update(Customer $customer, array $data): ?Customer
     {
-        return $this->updateCustomerAction->execute($id, $data);
+        return $this->updateCustomerAction->execute($customer, $data);
     }
 
-    public function delete(int $id, bool $forceDelete = false): bool
+    public function delete(Customer $customer, bool $forceDelete = false): bool
     {
-        return $this->deleteCustomerAction->execute($id, $forceDelete);
+        return $this->deleteCustomerAction->execute($customer, $forceDelete);
     }
 
-    public function restore(int $id): bool
+    public function restore(Customer $customer): bool
     {
-        return $this->customerRepository->restoreById($id);
+        return $this->customerRepository->restore($customer);
     }
 
-    public function find(int $id, array $with = []): ?Customer
+    public function findById(int $id, array $with = [], $trashed = true): ?Customer
     {
-        return $this->customerRepository->findById($id, true)->loadMissing($with);
+        return $this->customerRepository->findById($id, $trashed)->loadMissing($with);
     }
 
-    public function updateServiceSchedule(int $id, array $data): ?Customer
+    public function updateServiceSchedule(Customer $customer, array $data): ?Customer
     {
-        return $this->updateServiceScheduleAction->execute($id, $data);
+        return $this->updateServiceScheduleAction->execute($customer, $data);
     }
 }
