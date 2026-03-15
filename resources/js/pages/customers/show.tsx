@@ -113,7 +113,7 @@ export default function CustomerDetails({customer}: {customer: Customer}) {
                         </div>
                     </div>
 
-                    <div className="relative rounded-md mt-2">
+                    <div className="relative rounded-sm mt-2">
                         <div className="px-1 py-2">
                             <div className="flex items-center justify-between gap-2">
                                 <div>

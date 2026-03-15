@@ -14,7 +14,7 @@ function TabsList({
                       ...props
                   }: React.ComponentProps<typeof TabsPrimitive.List>) {
     return <TabsPrimitive.List data-slot="popover-portal" className={cn(
-        "inline-flex gap-1 rounded-lg w-full bg-neutral-100 p-1 dark:bg-neutral-800",
+        "inline-flex gap-1 rounded-sm w-full bg-neutral-100 p-1 dark:bg-neutral-800",
         className
     )} {...props} />
 }
@@ -23,7 +23,7 @@ function TabsTrigger({
     className,
                          ...props
                      }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
-    return <TabsPrimitive.Trigger className={cn("flex items-center rounded-md px-3.5 py-1.5 transition-colors",
+    return <TabsPrimitive.Trigger className={cn("flex items-center rounded-sm px-3.5 py-1.5 transition-colors",
         "focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
         "disabled:pointer-events-none disabled:opacity-50",
         "data-[state=active]:bg-white data-[state=active]:shadow-xs data-[state=active]:dark:bg-neutral-700 data-[state=active]:dark:text-neutral-100",

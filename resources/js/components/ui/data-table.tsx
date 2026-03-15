@@ -66,7 +66,7 @@ export function DataTable<T>({
             <table className={classNames('w-full text-left text-sm', tableClassName)}>
                 <thead
                     className={classNames(
-                        'rounded-lg bg-sidebar-accent text-sm font-bold text-sidebar-accent-foreground',
+                        'rounded-sm bg-sidebar-accent text-sm font-bold text-sidebar-accent-foreground',
                         headClassName,
                     )}
                 >

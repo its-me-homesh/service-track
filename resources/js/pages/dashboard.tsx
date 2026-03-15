@@ -149,7 +149,7 @@ export default function Dashboard({
                 </div>
                 <div className="relative flex-1 overflow-hidden">
                     <div className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2">
-                        <div className="relative rounded-md bg-gray-100 px-0 pt-4 text-gray-600 shadow dark:bg-gray-800 dark:text-gray-100">
+                        <div className="relative rounded-sm bg-gray-100 px-0 pt-4 text-gray-600 shadow dark:bg-gray-800 dark:text-gray-100">
                             <div className="flex items-center justify-between gap-2 px-2">
                                 <div className="text-sm font-medium uppercase">
                                     Service Due in next 7 days
@@ -158,7 +158,7 @@ export default function Dashboard({
 
                             <div className="mt-2 overflow-x-auto">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="rounded-lg bg-gray-600 text-sm font-bold text-gray-100 dark:bg-gray-100 dark:text-gray-600">
+                                    <thead className="rounded-sm bg-gray-600 text-sm font-bold text-gray-100 dark:bg-gray-100 dark:text-gray-600">
                                         <tr>
                                             <th
                                                 scope="col"
@@ -237,7 +237,7 @@ export default function Dashboard({
                                 </table>
                             </div>
                         </div>
-                        <div className="relative rounded-md bg-gray-100 px-0 pt-4 text-gray-600 shadow dark:bg-gray-800 dark:text-gray-100">
+                        <div className="relative rounded-sm bg-gray-100 px-0 pt-4 text-gray-600 shadow dark:bg-gray-800 dark:text-gray-100">
                             <div className="flex items-center justify-between gap-2 px-2">
                                 <div className="text-sm font-medium uppercase">
                                     Overdue Services
@@ -246,7 +246,7 @@ export default function Dashboard({
 
                             <div className="mt-2 overflow-x-auto">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="rounded-lg bg-gray-600 text-sm font-bold text-gray-100 dark:bg-gray-100 dark:text-gray-600">
+                                    <thead className="rounded-sm bg-gray-600 text-sm font-bold text-gray-100 dark:bg-gray-100 dark:text-gray-600">
                                         <tr>
                                             <th
                                                 scope="col"

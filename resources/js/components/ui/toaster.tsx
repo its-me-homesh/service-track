@@ -24,7 +24,7 @@ function ToastItem({
             open
             onOpenChange={(open) => !open && onDismiss(toast.id)}
             className={cn(
-                'group pointer-events-auto relative flex w-full items-start gap-3 rounded-md border border-neutral-200/70 bg-white/95 p-3 text-neutral-900 shadow-md backdrop-blur-sm transition',
+                'group pointer-events-auto relative flex w-full items-start gap-3 rounded-sm border border-neutral-200/70 bg-white/95 p-3 text-neutral-900 shadow-sm backdrop-blur-sm transition',
                 'data-[state=open]:animate-in',
                 'data-[state=closed]:animate-out',
                 'data-[state=open]:duration-200',

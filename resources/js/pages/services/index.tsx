@@ -59,10 +59,10 @@ export default function Customers({serviceDueInNextSeveralDays}) {
 
                     </div>
 
-                    <div className="relative rounded-md bg-gray-100 px-0 text-gray-600 shadow dark:bg-gray-800 dark:text-gray-100">
+                    <div className="relative rounded-sm bg-gray-100 px-0 text-gray-600 shadow dark:bg-gray-800 dark:text-gray-100">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
-                                <thead className="rounded-lg bg-gray-600 text-sm font-bold text-gray-100 dark:bg-gray-100 dark:text-gray-600">
+                                <thead className="rounded-sm bg-gray-600 text-sm font-bold text-gray-100 dark:bg-gray-100 dark:text-gray-600">
                                     <tr>
                                         <th
                                             scope="col"

@@ -70,7 +70,7 @@ export default function ActionsDropdown({
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="h-9 w-9 rounded-md"
+                        className="h-9 w-9 rounded-sm"
                     >
                         <EllipsisIcon className="h-5 w-5" />
                         <span className="sr-only">Actions</span>

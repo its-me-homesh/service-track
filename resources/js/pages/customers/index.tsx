@@ -220,7 +220,7 @@ export default function Customers({
                         </div>
                     )}
 
-                    <div className="relative rounded-md">
+                    <div className="relative rounded-sm">
                         <div className="px-1 py-2">
                             <Filters />
                         </div>
