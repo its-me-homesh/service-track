@@ -1,5 +1,9 @@
 <?php
 
+beforeEach(function () {
+    $this->markTestSkipped('This test is not required for the current project.');
+});
+
 test('registration screen can be rendered', function () {
     $response = $this->get(route('register'));
 

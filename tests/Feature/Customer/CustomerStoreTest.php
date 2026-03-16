@@ -13,12 +13,16 @@ function customerStorePayload(array $overrides = []): array
     return array_merge([
         'name' => 'Jane Doe',
         'contactNumber' => '1234567890',
+        'alternateContactNumber' => null,
         'email' => 'jane@example.com',
         'address' => '123 Main St',
         'productModel' => 'ABC-123',
-        'installationDate' => Carbon::now()->format('Y-m-d'),
+        'installationDate' => '2026-03-01',
         'serviceInterval' => 30,
+        'notes' => null,
         'lastServiceDate' => null,
+        'advanceServiceSettings' => false,
+        'autoCalculateNextServiceDate' => false,
         'nextServiceDate' => null,
     ], $overrides);
 }
@@ -26,7 +30,7 @@ function customerStorePayload(array $overrides = []): array
 function grantCustomerCreatePermission(User $user): void
 {
     app(PermissionRegistrar::class)->forgetCachedPermissions();
-    $permission = Permission::findOrCreate(CustomerPermission::CREATE->value, 'web');
+    $permission = Permission::findOrCreate(CustomerPermission::CREATE->key(), 'web');
     $user->givePermissionTo($permission);
 }
 
@@ -56,6 +60,7 @@ it('stores a customer for authorized users and redirects back', function () {
     $payload = customerStorePayload([
         'serviceInterval' => 15,
         'installationDate' => '2026-03-01',
+        'autoCalculateNextServiceDate' => false,
     ]);
 
     $response = $this->actingAs($user)->post(route('customers.store'), $payload);
@@ -73,14 +78,15 @@ it('stores a customer for authorized users and redirects back', function () {
     ]);
 });
 
-it('calculates next_service_date when not provided', function () {
+it('calculates next_service_date when auto calculation is enabled', function () {
     $user = User::factory()->create();
     grantCustomerCreatePermission($user);
 
     $payload = customerStorePayload([
         'installationDate' => '2026-03-01',
         'serviceInterval' => 20,
-        'nextServiceDate' => null,
+        'advanceServiceSettings' => true,
+        'autoCalculateNextServiceDate' => true,
     ]);
 
     $response = $this->actingAs($user)->post(route('customers.store'), $payload);
@@ -89,8 +95,7 @@ it('calculates next_service_date when not provided', function () {
 
     $expectedNextServiceDate = Carbon::parse($payload['installationDate'])
         ->addDays($payload['serviceInterval'])
-        ->startOfDay()
-        ->toDateTimeString();
+        ->format('Y-m-d');
 
     $this->assertDatabaseHas('customers', [
         'installation_date' => $payload['installationDate'],
@@ -136,9 +141,9 @@ it('validates serviceInterval boundaries', function ($value, bool $isValid) {
     }
 })->with([
     [1, true],
-    [365, true],
+    [1826, true],
     [0, false],
-    [366, false],
+    [1827, false],
     ['abc', false],
 ]);
 
@@ -158,6 +163,21 @@ it('validates nextServiceDate format', function () {
     grantCustomerCreatePermission($user);
 
     $payload = customerStorePayload(['nextServiceDate' => '2026-3-2']);
+
+    $response = $this->actingAs($user)->post(route('customers.store'), $payload);
+
+    $response->assertSessionHasErrors('nextServiceDate');
+});
+
+it('requires nextServiceDate when advance settings are enabled and auto calculation is disabled', function () {
+    $user = User::factory()->create();
+    grantCustomerCreatePermission($user);
+
+    $payload = customerStorePayload([
+        'advanceServiceSettings' => true,
+        'autoCalculateNextServiceDate' => false,
+        'nextServiceDate' => null,
+    ]);
 
     $response = $this->actingAs($user)->post(route('customers.store'), $payload);
 

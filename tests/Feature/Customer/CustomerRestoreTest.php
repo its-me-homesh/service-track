@@ -1,15 +1,15 @@
 <?php
 
 use App\Enums\Permissions\CustomerPermission;
+use App\Models\Customer;
 use App\Models\User;
-use App\Services\CustomerService;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
 function grantCustomerRestorePermission(User $user): void
 {
     app(PermissionRegistrar::class)->forgetCachedPermissions();
-    $perm = Permission::findOrCreate(CustomerPermission::RESTORE->value, 'web');
+    $perm = Permission::findOrCreate(CustomerPermission::RESTORE->key(), 'web');
     $user->givePermissionTo($perm);
 }
 
@@ -21,14 +21,30 @@ it('restores customer for authorized users', function () {
     $user = User::factory()->create();
     grantCustomerRestorePermission($user);
 
-    $mock = \Mockery::mock(CustomerService::class);
-    $mock->shouldReceive('restore')
-        ->once()
-        ->with(123)
-        ->andReturn(true);
-    app()->instance(CustomerService::class, $mock);
+    $customer = Customer::factory()->create(['created_by_id' => $user->id]);
 
-    $response = $this->actingAs($user)->patch(route('customers.restore', 123));
+    $this->actingAs($user);
+    $customer->delete();
+
+    $response = $this->actingAs($user)->patch(route('customers.restore', $customer->id));
 
     $response->assertRedirect();
+
+    $this->assertDatabaseHas('customers', [
+        'id' => $customer->id,
+        'deleted_at' => null,
+    ]);
+});
+
+it('forbids restore without permission', function () {
+    $user = User::factory()->create();
+    $customer = Customer::factory()->create(['created_by_id' => $user->id]);
+
+    $this->actingAs($user);
+    $customer->delete();
+
+    $response = $this->actingAs($user)->patch(route('customers.restore', $customer->id));
+
+    $response->assertForbidden();
+    $this->assertSoftDeleted('customers', ['id' => $customer->id]);
 });

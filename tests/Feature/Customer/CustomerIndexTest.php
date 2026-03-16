@@ -2,15 +2,13 @@
 
 use App\Enums\Permissions\CustomerPermission;
 use App\Models\User;
-use App\Services\CustomerService;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
 function grantCustomerPermission(User $user, CustomerPermission $permission): void
 {
     app(PermissionRegistrar::class)->forgetCachedPermissions();
-    $perm = Permission::findOrCreate($permission->value, 'web');
+    $perm = Permission::findOrCreate($permission->key(), 'web');
     $user->givePermissionTo($perm);
 }
 
@@ -31,14 +29,7 @@ it('forbids index for users without view permission', function () {
 
 it('shows index for authorized users', function () {
     $user = User::factory()->create();
-    grantCustomerPermission($user, CustomerPermission::LIST);
-
-    $paginator = new LengthAwarePaginator([], 0, 15, 1);
-    $mock = \Mockery::mock(CustomerService::class);
-    $mock->shouldReceive('pagination')
-        ->once()
-        ->andReturn($paginator);
-    app()->instance(CustomerService::class, $mock);
+    grantCustomerPermission($user, CustomerPermission::VIEW_ANY);
 
     $response = $this->actingAs($user)->get(route('customers.index'));
 

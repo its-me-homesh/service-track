@@ -1,22 +1,22 @@
 <?php
 
 use App\Enums\Permissions\CustomerPermission;
+use App\Models\Customer;
 use App\Models\User;
-use App\Services\CustomerService;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 
 function grantCustomerDeletePermission(User $user): void
 {
     app(PermissionRegistrar::class)->forgetCachedPermissions();
-    $perm = Permission::findOrCreate(CustomerPermission::DELETE->value, 'web');
+    $perm = Permission::findOrCreate(CustomerPermission::DELETE->key(), 'web');
     $user->givePermissionTo($perm);
 }
 
 function grantCustomerForceDeletePermission(User $user): void
 {
     app(PermissionRegistrar::class)->forgetCachedPermissions();
-    $perm = Permission::findOrCreate(CustomerPermission::FORCE_DELETE->value, 'web');
+    $perm = Permission::findOrCreate(CustomerPermission::FORCE_DELETE->key(), 'web');
     $user->givePermissionTo($perm);
 }
 
@@ -28,18 +28,16 @@ it('soft deletes customer when type is soft', function () {
     $user = User::factory()->create();
     grantCustomerDeletePermission($user);
 
-    $mock = \Mockery::mock(CustomerService::class);
-    $mock->shouldReceive('delete')
-        ->once()
-        ->with(123, false)
-        ->andReturn(true);
-    app()->instance(CustomerService::class, $mock);
+    $customer = Customer::factory()->create(['created_by_id' => $user->id]);
 
-    $response = $this->actingAs($user)->delete(route('customers.delete', 123), [
+    $response = $this->actingAs($user)->delete(route('customers.delete', $customer->id), [
         'type' => 'soft',
     ]);
 
     $response->assertRedirect();
+
+    $this->assertSoftDeleted('customers', ['id' => $customer->id]);
+    expect(Customer::withTrashed()->find($customer->id)->deleted_by_id)->toBe($user->id);
 });
 
 it('force deletes customer when type is permanent', function () {
@@ -47,16 +45,27 @@ it('force deletes customer when type is permanent', function () {
     grantCustomerDeletePermission($user);
     grantCustomerForceDeletePermission($user);
 
-    $mock = \Mockery::mock(CustomerService::class);
-    $mock->shouldReceive('delete')
-        ->once()
-        ->with(123, true)
-        ->andReturn(true);
-    app()->instance(CustomerService::class, $mock);
+    $customer = Customer::factory()->create(['created_by_id' => $user->id]);
 
-    $response = $this->actingAs($user)->delete(route('customers.delete', 123), [
+    $response = $this->actingAs($user)->delete(route('customers.delete', $customer->id), [
         'type' => 'permanent',
     ]);
 
-    $response->assertRedirect();
+    $response->assertRedirect(route('customers.index'));
+
+    $this->assertDatabaseMissing('customers', ['id' => $customer->id]);
+});
+
+it('forbids permanent deletion without force delete permission', function () {
+    $user = User::factory()->create();
+    grantCustomerDeletePermission($user);
+
+    $customer = Customer::factory()->create(['created_by_id' => $user->id]);
+
+    $response = $this->actingAs($user)->delete(route('customers.delete', $customer->id), [
+        'type' => 'permanent',
+    ]);
+
+    $response->assertForbidden();
+    $this->assertDatabaseHas('customers', ['id' => $customer->id]);
 });

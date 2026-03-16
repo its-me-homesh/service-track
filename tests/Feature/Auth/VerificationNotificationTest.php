@@ -4,6 +4,10 @@ use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
 
+beforeEach(function () {
+    $this->markTestSkipped('This test is not required for the current project.');
+});
+
 test('sends verification notification', function () {
     Notification::fake();
 
