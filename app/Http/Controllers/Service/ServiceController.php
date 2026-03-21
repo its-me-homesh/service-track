@@ -39,9 +39,7 @@ class ServiceController extends Controller
 
         $this->authorize(ServicePermission::CREATE->value, Service::class);
         $this->serviceManagementService->create($request->validated());
-        return redirect()
-            ->route('services.index')
-            ->with('success', 'Service created successfully.');
+        return back()->with('success', 'Service created successfully.');
     }
 
     public function show(int $id)

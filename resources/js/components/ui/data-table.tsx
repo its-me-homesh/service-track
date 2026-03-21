@@ -66,7 +66,7 @@ export function DataTable<T>({
             <table className={classNames('w-full text-left text-sm', tableClassName)}>
                 <thead
                     className={classNames(
-                        'rounded-sm bg-sidebar-accent text-sm font-bold text-sidebar-accent-foreground',
+                        'rounded-sm bg-sidebar-accent text-sm font-bold text-sidebar-accent-foreground py-3',
                         headClassName,
                     )}
                 >
@@ -95,7 +95,7 @@ export function DataTable<T>({
                                     scope="col"
                                     aria-sort={isSortable ? ariaSort : undefined}
                                     className={classNames(
-                                        'px-2 py-1 text-xs font-medium uppercase',
+                                        'px-2 py-3 text-xs font-medium uppercase',
                                         column.headerClassName,
                                         {
                                             'rounded-tl-sm': index === 0,

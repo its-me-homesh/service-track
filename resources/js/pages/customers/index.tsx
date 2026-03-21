@@ -85,7 +85,6 @@ export default function Customers({
             key: 'name',
             header: 'Customer',
             accessorKey: 'name',
-            headerClassName: 'py-3',
             cellClassName: 'text-heading whitespace-nowrap',
             isRowHeader: true,
             sortable: true,

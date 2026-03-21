@@ -100,7 +100,6 @@ export default function Services({
             key: 'customer_id',
             header: 'Customer',
             accessorKey: 'customerId',
-            headerClassName: 'py-3',
             cellClassName: 'text-heading whitespace-nowrap',
             isRowHeader: true,
             sortable: true,
@@ -171,6 +170,7 @@ export default function Services({
                 <Badge
                     color={service.statusDetail?.color}
                     className="cursor-pointer"
+                    onClick={() => handleOpenStatusForm(service)}
                 >
                     {service.statusDetail?.label}
                 </Badge>

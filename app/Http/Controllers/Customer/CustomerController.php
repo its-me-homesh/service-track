@@ -37,6 +37,7 @@ class CustomerController extends Controller
     {
         $customer = $this->customerService->findById($id);
         $this->authorize(CustomerPermission::VIEW->value, $customer);
+        $customer->loadMissing(['recentServices.createdBy', 'recentServices.updatedBy']);
         return Inertia::render('customers/show',[
             'customer' => CustomerResource::make($customer)->resolve()
         ]);
@@ -46,8 +47,7 @@ class CustomerController extends Controller
     {
         $this->authorize(CustomerPermission::CREATE->value, Customer::class);
         $this->customerService->create($request->validated());
-        return redirect()
-            ->route('customers.index')
+        return back('customers.index')
             ->with('success', 'Customer created successfully.');
     }
 

@@ -63,6 +63,7 @@ export interface Customer {
     createdAt: string;
     updatedAt: string;
     deletedAt: string;
+    recentServices?: Service[];
     [key: string]: unknown;
 }
 

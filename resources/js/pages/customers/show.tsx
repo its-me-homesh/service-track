@@ -1,19 +1,24 @@
 import AppLayout from '@/layouts/app-layout';
 import { index as customersIndex } from '@/routes/customers';
-import { type BreadcrumbItem, Customer } from '@/types';
+import { type BreadcrumbItem, Customer, Service, ServiceStatus } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 
-import { Search, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { index as servicesindex } from '@/routes/services';
+import { index as servicesIndex } from '@/routes/services';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import CustomerFormCard from '@/components/customers/customer-form-card';
 import CustomerAdvancedServiceSettingsForm from '@/components/customers/advance-service-settings-form';
-import ActionsDropdown from '@/components/customers/actions-dropdown';
+import CustomerActionsDropdown from '@/components/customers/actions-dropdown';
+import ServiceActionsDropdown from '@/components/services/actions-dropdown';
 import { DataTable, DataTableColumn } from '@/components/ui/data-table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import moment from 'moment/moment';
+import { Badge } from '@/components/ui/badge';
+import { useState } from 'react';
+import ServiceFormDialog from '@/components/services/service-form-dialog';
+import ChangeStatusFormDialog from '@/components/services/change-status-form-dialog';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,60 +31,150 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function CustomerDetails({customer}: {customer: Customer}) {
+export default function CustomerDetails({
+    customer,
+    serviceStatuses,
+}: {
+    customer: Customer;
+    serviceStatuses: ServiceStatus[];
+}) {
+    const [serviceFormOpened, setServiceFormOpened] = useState<boolean>(false);
 
-    const columns: DataTableColumn<Customer>[] = [
-        {
-            key: 'name',
-            header: 'Customer',
-            accessorKey: 'name',
-            headerClassName: 'py-3',
-            cellClassName: 'text-heading whitespace-nowrap',
-            isRowHeader: true,
-        },
-        {
-            key: 'assigned_to_id',
-            header: 'Assignee',
-            accessorKey: 'assignedTo',
-        },
+    const [statusFormOpened, setStatusFormOpened] = useState<boolean>(false);
+
+    const [selectedService, setSelectedService] = useState<Service | null>(
+        null,
+    );
+
+    const handleOpenServiceForm = (service?: Service) => {
+        setSelectedService(service ?? null);
+        setServiceFormOpened(true);
+    };
+
+    const handleCloseServiceForm = () => {
+        setSelectedService(null);
+        setServiceFormOpened(false);
+    };
+
+    const handleOpenStatusForm = (service: Service) => {
+        setSelectedService(service);
+        setStatusFormOpened(true);
+    };
+
+    const handleCloseStatusForm = () => {
+        setSelectedService(null);
+        setStatusFormOpened(false);
+    };
+
+    const columns: DataTableColumn<Service>[] = [
         {
             key: 'service_date',
-            header: 'service Date',
+            header: 'Service Date',
             accessorKey: 'serviceDate',
+            cell: (service) => (
+                <div className="flex flex-col items-start justify-start gap-0.5">
+                    <span>
+                        {service.serviceDate
+                            ? moment(service.serviceDate).format('ll')
+                            : null}
+                    </span>
+                    <small>
+                        {service.serviceDate
+                            ? moment(service.serviceDate).fromNow()
+                            : null}
+                    </small>
+                </div>
+            ),
         },
         {
             key: 'status',
             header: 'Status',
             accessorKey: 'status',
+            cell: (service) => (
+                <Badge
+                    color={service.statusDetail?.color}
+                    className="cursor-pointer"
+                >
+                    {service.statusDetail?.label}
+                </Badge>
+            ),
         },
         {
-            key: 'created_by_id',
-            header: 'Created By',
-            accessorKey: 'createdBy',
+            key: 'created_at',
+            header: 'Created',
+            accessorKey: 'createdAt',
+            cell: (service) => (
+                <div className="flex flex-col items-start justify-start gap-0.5">
+                    <span>
+                        {service.createdAt
+                            ? moment(service.createdAt).format('lll')
+                            : null}
+                    </span>
+                    <small>{service?.createdBy?.name}</small>
+                </div>
+            ),
         },
         {
-            key: 'updated_by_id',
-            header: 'Updated By',
-            accessorKey: 'updatedBy',
+            key: 'updated_at',
+            header: 'Updated',
+            accessorKey: 'updatedAt',
+            cell: (service) => (
+                <div className="flex flex-col items-start justify-start gap-0.5">
+                    <span>
+                        {service.updatedAt
+                            ? moment(service.updatedAt).format('lll')
+                            : null}
+                    </span>
+                    <small>{service?.updatedBy?.name}</small>
+                </div>
+            ),
         },
         {
             key: 'actions',
             header: 'Actions',
-            cell: (customer) => <ActionsDropdown customer={customer} />,
+            cell: (service) => (
+                <ServiceActionsDropdown
+                    service={service}
+                    onOpenForm={handleOpenServiceForm}
+                    onOpenStatusForm={handleOpenStatusForm}
+                />
+            ),
         },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Customer Details & Recent Services" />
+            <ServiceFormDialog
+                open={serviceFormOpened}
+                onOpenChange={setServiceFormOpened}
+                onClose={handleCloseServiceForm}
+                selectedService={selectedService}
+                statuses={serviceStatuses}
+                customer={customer}
+            />
+            {selectedService && (
+                <ChangeStatusFormDialog
+                    open={statusFormOpened}
+                    onOpenChange={setStatusFormOpened}
+                    onClose={handleCloseStatusForm}
+                    selectedService={selectedService}
+                    statuses={serviceStatuses}
+                />
+            )}
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative flex-1 overflow-hidden">
                     <div className="flex items-center justify-end gap-2 px-1 py-1">
-                        <ActionsDropdown
+                        <CustomerActionsDropdown
                             customer={customer}
                             context="details"
                         />
-                        <Button variant="default">Add Service</Button>
+                        <Button
+                            variant="default"
+                            onClick={() => handleOpenServiceForm()}
+                        >
+                            Add Service
+                        </Button>
                     </div>
 
                     <div className="mt-2 px-1">
@@ -116,18 +211,11 @@ export default function CustomerDetails({customer}: {customer: Customer}) {
                     <div className="relative mt-2 rounded-sm">
                         <div className="px-1 py-2">
                             <div className="flex items-center justify-between gap-2">
-                                <div>
-                                    <Input
-                                        placeholder="Search"
-                                        prefixIcon={
-                                            <Search className="h-4 w-4" />
-                                        }
-                                    />
-                                </div>
+                                <div className="text-sm">Recent Services</div>
 
                                 <div className="flex items-center justify-end gap-2">
                                     <Link
-                                        href={`${servicesindex().url}?customerId[]=${customer.id}`}
+                                        href={`${servicesIndex().url}?customerId[]=${customer.id}`}
                                         className="flex items-center justify-end gap-2 text-sm text-blue-500 uppercase"
                                     >
                                         <Tooltip>
@@ -145,7 +233,7 @@ export default function CustomerDetails({customer}: {customer: Customer}) {
                         </div>
                         <DataTable
                             columns={columns}
-                            data={[]}
+                            data={customer?.recentServices}
                             rowClassName={(_, index) =>
                                 index % 2 === 0 ? 'bg-sidebar' : 'bg-background'
                             }

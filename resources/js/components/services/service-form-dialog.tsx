@@ -31,7 +31,7 @@ import { CustomerSelect } from '@/components/select-customer';
 import { SelectStatus } from '@/components/select-status';
 
 const initialFormData: ServiceFormData = {
-    customerId: 784,
+    customerId: null,
     serviceDate: '',
     notes: '',
     cost: null,
@@ -101,10 +101,21 @@ export default function ServiceFormDialog({
         if (!open) return;
         if (selectedService) {
             setData(mapServiceToFormData(selectedService, customer));
-        } else {
-            setData(initialFormData);
+            return;
         }
+
+        if (customer) {
+            setData({
+                ...initialFormData,
+                customerId: customer.id,
+            });
+            return;
+        }
+
+        setData(initialFormData);
     }, [customer, open, selectedService, setData]);
+
+    const showCustomerSelect = !customer && !selectedService;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -123,7 +134,7 @@ export default function ServiceFormDialog({
                 >
                     <div className="flex-1 space-y-4 overflow-y-auto scroll-smooth px-1">
                         <div className="grid grid-cols-1 gap-4">
-                            {!selectedService && (
+                            {showCustomerSelect && (
                                 <div>
                                     <Label htmlFor="customerId">
                                         Select a Customer*
