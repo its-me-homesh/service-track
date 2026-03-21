@@ -8,7 +8,6 @@ import {
 import { confirm } from '@/hooks/use-confirm';
 import {
     deleteMethod as customersDelete,
-    index as customersIndex,
     restore as customersRestore,
     view as customersView,
 } from '@/routes/customers';

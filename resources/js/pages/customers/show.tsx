@@ -6,7 +6,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Search, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { services } from '@/routes';
+import { index as servicesindex } from '@/routes/services';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import CustomerFormCard from '@/components/customers/customer-form-card';
@@ -113,7 +113,7 @@ export default function CustomerDetails({customer}: {customer: Customer}) {
                         </div>
                     </div>
 
-                    <div className="relative rounded-sm mt-2">
+                    <div className="relative mt-2 rounded-sm">
                         <div className="px-1 py-2">
                             <div className="flex items-center justify-between gap-2">
                                 <div>
@@ -127,7 +127,7 @@ export default function CustomerDetails({customer}: {customer: Customer}) {
 
                                 <div className="flex items-center justify-end gap-2">
                                     <Link
-                                        href={`${services().url}?customerId=${customer.id}`}
+                                        href={`${servicesindex().url}?customerId[]=${customer.id}`}
                                         className="flex items-center justify-end gap-2 text-sm text-blue-500 uppercase"
                                     >
                                         <Tooltip>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\ServiceStatus;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -51,6 +52,11 @@ class HandleInertiaRequests extends Middleware
                 'error' => $request->session()->get('error'),
                 'info' => $request->session()->get('info'),
             ],
+            'serviceStatuses' => collect(ServiceStatus::cases())->map(fn($status) => [
+                'label' => $status->label(),
+                'value' => $status->value,
+                'color' => $status->color(),
+            ])
         ];
     }
 }

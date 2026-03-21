@@ -7,7 +7,7 @@ use App\Actions\Customer\DeleteCustomerAction;
 use App\Actions\Customer\UpdateCustomerAction;
 use App\Actions\Customer\UpdateServiceScheduleAction;
 use App\Models\Customer;
-use App\Repositories\CustomerRepository;
+use App\Repositories\Contracts\CustomerRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class CustomerService
@@ -18,7 +18,7 @@ class CustomerService
         private readonly UpdateCustomerAction        $updateCustomerAction,
         private readonly DeleteCustomerAction        $deleteCustomerAction,
         private readonly UpdateServiceScheduleAction $updateServiceScheduleAction,
-        private readonly CustomerRepository          $customerRepository
+        private readonly CustomerRepositoryInterface $customerRepository
     )
     {
     }
@@ -60,5 +60,10 @@ class CustomerService
     public function updateServiceSchedule(Customer $customer, array $data): ?Customer
     {
         return $this->updateServiceScheduleAction->execute($customer, $data);
+    }
+
+    public function search(array $params = [])
+    {
+        return $this->customerRepository->search($params);
     }
 }

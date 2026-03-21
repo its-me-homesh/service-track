@@ -10,7 +10,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, services, users } from '@/routes';
+import { dashboard, users } from '@/routes';
+import { index as servicesIndex } from '@/routes/services';
 import { index as customersIndex } from '@/routes/customers';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
@@ -30,7 +31,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Services',
-        href: services(),
+        href: servicesIndex(),
         icon: CalendarClock,
     },
 ];

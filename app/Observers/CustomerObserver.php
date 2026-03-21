@@ -9,6 +9,7 @@ class CustomerObserver
     public function creating(Customer $model): void
     {
         $model->created_by_id = auth()->id();
+        $model->updated_by_id = auth()->id();
     }
 
     public function updating(Customer $model): void

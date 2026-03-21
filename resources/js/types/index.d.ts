@@ -97,7 +97,7 @@ export interface CustomerFilters {
     serviceDue: boolean;
 }
 
-export interface ServiceCounts{
+export interface ServiceCounts {
     pending: number;
     assigned: number;
     inProgress: number;
@@ -139,7 +139,6 @@ export type PaginatedData<T> = {
     meta: PaginationMeta;
 };
 
-
 export type TableHeader<T> = {
     label: string;
     key: keyof T;
@@ -153,12 +152,63 @@ export interface TextareaProps extends React.ComponentProps<'textarea'> {
     prefixIcon?: React.ReactNode;
 }
 
-export type ConfirmDialogProps = {
-    open: boolean;
-    title?: string;
-    description?: string;
-    cancelLabel?: string;
-    confirmLabel?: string;
-    onConfirm?: () => void;
-    onCancel?: () => void;
+export interface Service {
+    id: number;
+    customerId: number;
+    customer: Customer | null;
+    serviceDate: string;
+    notes: string;
+    cost: number;
+    status: string;
+    createdAt: string;
+    createdById: number;
+    createdBy: User | null;
+    updatedAt: string;
+    updatedById: number;
+    updatedBy: User | null;
+    deletedAt: string;
+    deletedById: number;
+    deletedBy: User | null;
+    statusDetail?: ServiceStatus;
+    [key: string]: unknown;
+}
+
+export interface ServiceStatus {
+    value: string;
+    label: string;
+    color?:
+        | 'amber'
+        | 'blue'
+        | 'violet'
+        | 'orange'
+        | 'green'
+        | 'red';
+    [key: string]: unknown;
+}
+
+export interface ServiceFilters {
+    includeTrashed: boolean;
+    onlyTrashed: boolean;
+    status: string[];
+    customerId: number[];
+}
+
+export interface ServiceFormData {
+    customerId: number | null;
+    serviceDate: string;
+    notes: string;
+    cost: number | null;
+    status: string;
+    changeStatus: boolean;
+}
+
+export interface ServiceStatusFormData {
+    serviceId?: number | null;
+    status: string;
+    notes?: string;
+}
+
+type CustomerOption = {
+    id: number;
+    name: string;
 };

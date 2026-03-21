@@ -13,6 +13,7 @@ use App\Http\Resources\Customers\CustomerCollection;
 use App\Http\Resources\Customers\CustomerResource;
 use App\Models\Customer;
 use App\Services\CustomerService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
@@ -92,5 +93,10 @@ class CustomerController extends Controller
         $this->authorize(CustomerPermission::UPDATE_SERVICE_SCHEDULE->value, $customer);
         $this->customerService->updateServiceSchedule($customer, $request->validated());
         return back()->with('success', 'Customer service schedule settings updated successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        return CustomerCollection::make($this->customerService->search($request->all()))->resolve();
     }
 }

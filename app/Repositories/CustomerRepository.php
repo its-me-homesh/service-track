@@ -31,13 +31,14 @@ class CustomerRepository implements CustomerRepositoryInterface
         'updated_at',
     ];
 
-    public function all(array $params = []): Collection{
+    public function search(array $params = []): Collection{
         $searchTerm = $params['term'] ?? '';
         $includeTrashed = $params['includeTrashed'] ?? false;
         $onlyTrashed = $params['onlyTrashed'] ?? false;
-        return Customer::when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], 'like', '%' . $searchTerm . '%'))
+        return Customer::when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], 'ilike', '%' . $searchTerm . '%'))
             ->when($includeTrashed, fn($query) => $query->withTrashed())
             ->when($onlyTrashed, fn($query) => $query->onlyTrashed())
+            ->when(empty($searchTerm), fn($query) => $query->take(10))
             ->get();
     }
 
@@ -94,5 +95,10 @@ class CustomerRepository implements CustomerRepositoryInterface
     public function restore(Customer $customer): bool
     {
         return $customer->restore();
+    }
+
+    public function findByIdOrNull(int $id, bool $trashed = false): ?Customer
+    {
+        return Customer::when($trashed, fn($q) => $q->withTrashed())->find($id);
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy(CustomerObserver::class)]
 class Customer extends Model
 {
     use HasFactory, SoftDeletes;
@@ -47,5 +50,10 @@ class Customer extends Model
     public function services(): HasMany
     {
         return $this->hasMany(Service::class);
+    }
+
+    public function recentServices(): HasMany
+    {
+        return $this->hasMany(Service::class)->latest('service_date')->limit(10);
     }
 }

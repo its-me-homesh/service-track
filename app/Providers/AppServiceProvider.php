@@ -4,7 +4,11 @@ namespace App\Providers;
 
 use App\Models\Customer;
 use App\Repositories\Contracts\CustomerRepositoryInterface;
+use App\Repositories\Contracts\ServiceHistoryRepositoryInterface;
+use App\Repositories\Contracts\ServiceRepositoryInterface;
 use App\Repositories\CustomerRepository;
+use App\Repositories\ServiceHistoryRepository;
+use App\Repositories\ServiceRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->app->bind(CustomerRepositoryInterface::class, CustomerRepository::class);
+        $this->app->bind(ServiceRepositoryInterface::class, ServiceRepository::class);
+        $this->app->bind(ServiceHistoryRepositoryInterface::class, ServiceHistoryRepository::class);
     }
 
     /**
@@ -26,6 +32,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Customer::observe(\App\Observers\CustomerObserver::class);
     }
 }

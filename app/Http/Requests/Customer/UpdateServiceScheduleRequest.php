@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Customer;
 
+use App\Enums\ServiceStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,14 +24,13 @@ class UpdateServiceScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lastServiceDate' => 'nullable|date|date_format:Y-m-d',
-            'autoCalculateNextServiceDate' => 'nullable|boolean',
-            'nextServiceDate' => [
+            'status' => [
                 'nullable',
-                'date_format:Y-m-d',
+                'string',
                 Rule::requiredIf(
-                    fn () => !$this->boolean('autoCalculateNextServiceDate')
+                    fn () => $this->boolean('changeStatus')
                 ),
+                Rule::enum(ServiceStatus::class)
             ],
         ];
     }

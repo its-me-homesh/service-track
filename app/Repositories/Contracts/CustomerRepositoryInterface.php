@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface CustomerRepositoryInterface
 {
-    public function all(array $params = []): Collection;
+    public function search(array $params = []): Collection;
 
     public function paginate(array $params): LengthAwarePaginator;
 
@@ -21,4 +21,6 @@ interface CustomerRepositoryInterface
     public function delete(Customer $customer, bool $hardDelete = false): bool;
 
     public function restore(Customer $customer): bool;
+
+    public function findByIdOrNull(int $id, bool $trashed = false): ?Customer;
 }
