@@ -73,6 +73,18 @@ export default function ServiceDetailsCard({
                 </div>
                 <div className="flex items-start gap-2">
                     <dt className="min-w-[110px] text-muted-foreground">
+                        Cost:
+                    </dt>
+                    <dd>
+                        <div className="flex items-end gap-0.5">
+                            <span>
+                                {service.cost || '-'}
+                            </span>
+                        </div>
+                    </dd>
+                </div>
+                <div className="flex items-start gap-2">
+                    <dt className="min-w-[110px] text-muted-foreground">
                         Notes:
                     </dt>
                     <dd className="flex-1">
