@@ -37,7 +37,7 @@ class CustomerController extends Controller
     {
         $customer = $this->customerService->findById($id);
         $this->authorize(CustomerPermission::VIEW->value, $customer);
-        $customer->loadMissing(['recentServices.createdBy', 'recentServices.updatedBy']);
+        $customer->loadMissing(['recentServices.createdBy', 'recentServices.updatedBy', 'lastService.updatedBy']);
         return Inertia::render('customers/show',[
             'customer' => CustomerResource::make($customer)->resolve()
         ]);

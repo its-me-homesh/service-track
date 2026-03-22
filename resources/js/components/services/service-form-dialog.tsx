@@ -70,14 +70,21 @@ export default function ServiceFormDialog({
     statuses,
     customer,
 }: Props) {
-    const { data, setData, post, put, processing, errors, reset } =
+    const { data, setData, post, put, processing, errors, reset, clearErrors } =
         useForm<ServiceFormData>(initialFormData);
-
     const handleResetAndClose = () => {
         reset();
+        clearErrors();
         if (onClose) {
             onClose();
         }
+    };
+
+    const handleDialogOpenChange = (nextOpen: boolean) => {
+        if (!nextOpen) {
+            handleResetAndClose();
+        }
+        onOpenChange(nextOpen);
     };
 
     const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -118,7 +125,7 @@ export default function ServiceFormDialog({
     const showCustomerSelect = !customer && !selectedService;
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={handleDialogOpenChange}>
             <DialogContent className={className}>
                 <DialogHeader>
                     <DialogTitle>

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy(CustomerObserver::class)]
@@ -55,5 +56,10 @@ class Customer extends Model
     public function recentServices(): HasMany
     {
         return $this->hasMany(Service::class)->latest('service_date')->limit(10);
+    }
+
+    public function lastService(): HasOne
+    {
+        return $this->hasOne(Service::class)->latest('updated_at');
     }
 }

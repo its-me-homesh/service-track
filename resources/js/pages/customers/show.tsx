@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import ServiceFormDialog from '@/components/services/service-form-dialog';
 import ChangeStatusFormDialog from '@/components/services/change-status-form-dialog';
+import ServiceDetailsCard from '@/components/customers/service-details-card';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -145,15 +146,18 @@ export default function CustomerDetails({
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Customer Details & Recent Services" />
-            <ServiceFormDialog
-                open={serviceFormOpened}
-                onOpenChange={setServiceFormOpened}
-                onClose={handleCloseServiceForm}
-                selectedService={selectedService}
-                statuses={serviceStatuses}
-                customer={customer}
-            />
-            {selectedService && (
+            {serviceFormOpened && (
+                <ServiceFormDialog
+                    open={serviceFormOpened}
+                    onOpenChange={setServiceFormOpened}
+                    onClose={handleCloseServiceForm}
+                    selectedService={selectedService}
+                    statuses={serviceStatuses}
+                    customer={selectedService ? null : customer}
+                />
+            )}
+
+            {selectedService && statusFormOpened && (
                 <ChangeStatusFormDialog
                     open={statusFormOpened}
                     onOpenChange={setStatusFormOpened}
@@ -183,27 +187,39 @@ export default function CustomerDetails({
                                 className="col-span-1 lg:col-span-2"
                                 selectedCustomer={customer}
                             />
-                            <div className="col-span-1">
-                                <Card className="py-0">
-                                    <Tabs defaultValue="activity-log">
+                            <div className="col-span-1 flex h-full flex-col gap-2">
+                                <Card className="flex-1 py-0">
+                                    <Tabs
+                                        defaultValue="advanced-service-settings"
+                                        className="flex h-full flex-col"
+                                    >
                                         <TabsList className="rounded-b-none">
                                             <TabsTrigger value="advanced-service-settings">
                                                 Advanced Service Settings
                                             </TabsTrigger>
-                                            <TabsTrigger value="activity-log">
-                                                Activity Log
-                                            </TabsTrigger>
                                         </TabsList>
-                                        <TabsContent value="advanced-service-settings">
+                                        <TabsContent
+                                            value="advanced-service-settings"
+                                            className="flex-1"
+                                        >
                                             <CustomerAdvancedServiceSettingsForm
                                                 selectedCustomer={customer}
                                             />
                                         </TabsContent>
-                                        <TabsContent value="activity-log">
-                                            Activity Log
-                                        </TabsContent>
                                     </Tabs>
                                 </Card>
+                                {customer.lastService && (
+                                    <ServiceDetailsCard
+                                        className="mt-2"
+                                        onOpenForm={handleOpenServiceForm}
+                                        onOpenStatusForm={() =>
+                                            handleOpenStatusForm(
+                                                customer.lastService!,
+                                            )
+                                        }
+                                        service={customer.lastService}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>
@@ -216,7 +232,7 @@ export default function CustomerDetails({
                                 <div className="flex items-center justify-end gap-2">
                                     <Link
                                         href={`${servicesIndex().url}?customerId[]=${customer.id}`}
-                                        className="flex items-center justify-end gap-2 text-sm text-blue-500 uppercase"
+                                        className="flex items-center justify-end gap-2 text-sm text-sky-600 uppercase"
                                     >
                                         <Tooltip>
                                             <TooltipTrigger>

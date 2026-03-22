@@ -60,7 +60,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         Paginator::currentPageResolver(fn() => $page);
 
         return Customer::query()
-            ->when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], 'like', '%' . $searchTerm . '%'))
+            ->when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], 'ilike', '%' . $searchTerm . '%'))
             ->when($includeTrashed, fn($q) => $q->withTrashed())
             ->when($onlyTrashed, fn($q) => $q->onlyTrashed())
             ->when($serviceOverdue, fn($q) => $q->where('next_service_date', '<=', now()))

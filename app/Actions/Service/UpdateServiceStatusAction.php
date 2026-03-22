@@ -2,10 +2,12 @@
 
 namespace App\Actions\Service;
 
+use App\Actions\Customer\UpdateServiceScheduleAction;
 use App\Actions\ServiceHistory\CreateServiceHistoryAction;
 use App\Enums\ServiceHistoryEventType;
 use App\Enums\ServiceStatus;
 use App\Models\Service;
+use App\Repositories\Contracts\CustomerRepositoryInterface;
 use App\Repositories\Contracts\ServiceRepositoryInterface;
 use App\Support\Comparisons\ChangeSetBuilder;
 use App\Support\Validators\ServiceStatusTransitionValidator;
@@ -18,6 +20,8 @@ class UpdateServiceStatusAction
         private readonly ServiceStatusTransitionValidator $serviceStatusTransitionValidator,
         private readonly CreateServiceHistoryAction       $createServiceHistoryAction,
         private readonly ChangeSetBuilder                 $serviceChangeBuilder,
+        private readonly CustomerRepositoryInterface $customerRepository,
+        private readonly UpdateServiceScheduleAction $updateServiceScheduleAction
     )
     {
 
@@ -37,7 +41,7 @@ class UpdateServiceStatusAction
 
         $oldValues = [
             'notes' => $service->notes,
-            'status' => $service->status,
+            'status' => $currentStatus->label(),
         ];
 
         $updatedService = $this->serviceRepository->update($service, [
@@ -45,9 +49,19 @@ class UpdateServiceStatusAction
             'notes' => $data['notes'] ?? $service->notes,
         ]);
 
+        if ($currentStatus !== $status && $updatedService->status === ServiceStatus::COMPLETED) {
+            $customer = $this->customerRepository->findByIdOrNull($updatedService->customer_id, true);
+            if ($customer) {
+                $this->updateServiceScheduleAction->execute($customer, [
+                    'autoCalculateNextServiceDate' => true,
+                    'lastServiceDate' => $updatedService->service_date,
+                ]);
+            }
+        }
+
         $newValues = [
             'notes' => $updatedService->notes,
-            'status' => $updatedService->status,
+            'status' => $status->label(),
         ];
 
         $changes = $this->serviceChangeBuilder->buildFrom($oldValues, $newValues);

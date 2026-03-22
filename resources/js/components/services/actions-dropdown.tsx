@@ -28,7 +28,7 @@ export default function ActionsDropdown({
     service: Service;
     onOpenForm?: (service: Service) => void;
     onOpenStatusForm?: (service: Service) => void;
-    context?: 'table' | 'details';
+    context?: 'table' | 'details' | 'compact';
 }) {
     const handleDelete = async (type: 'soft' | 'permanent' = 'soft') => {
         const wasConfirmed = await confirm(
@@ -111,7 +111,7 @@ export default function ActionsDropdown({
                         </DropdownMenuItem>
                     )}
 
-                    {!service.deletedAt && (
+                    {!service.deletedAt && context !== 'compact' && (
                         <DropdownMenuItem
                             className="cursor-pointer"
                             onClick={() => handleDelete('soft')}
@@ -123,7 +123,7 @@ export default function ActionsDropdown({
                         </DropdownMenuItem>
                     )}
 
-                    {service.deletedAt && (
+                    {service.deletedAt && context !== 'compact' && (
                         <DropdownMenuItem
                             className="cursor-pointer"
                             onClick={handleRestore}
@@ -134,7 +134,7 @@ export default function ActionsDropdown({
                             </span>
                         </DropdownMenuItem>
                     )}
-                    {service.deletedAt && (
+                    {service.deletedAt && context !== 'compact' && (
                         <DropdownMenuItem
                             className="cursor-pointer"
                             onClick={() => handleDelete('permanent')}

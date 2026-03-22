@@ -261,13 +261,15 @@ export default function Services({
                         </Button>
                     </div>
 
-                    <ServiceFormDialog
-                        open={serviceFormOpened}
-                        onOpenChange={setServiceFormOpened}
-                        onClose={handleCloseServiceForm}
-                        selectedService={selectedService}
-                        statuses={serviceStatuses}
-                    />
+                    {serviceFormOpened && (
+                        <ServiceFormDialog
+                            open={serviceFormOpened}
+                            onOpenChange={setServiceFormOpened}
+                            onClose={handleCloseServiceForm}
+                            selectedService={selectedService}
+                            statuses={serviceStatuses}
+                        />
+                    )}
                     {selectedService && (
                         <ChangeStatusFormDialog
                             open={statusFormOpened}

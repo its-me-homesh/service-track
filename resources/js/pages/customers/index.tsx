@@ -25,6 +25,7 @@ import { useState } from 'react';
 import ActionsDropdown from '@/components/customers/actions-dropdown';
 import CustomerFormCard from '@/components/customers/customer-form-card';
 import Filters from '@/components/customers/filters';
+import moment from 'moment/moment';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -135,18 +136,60 @@ export default function Customers({
             header: 'Installation Date',
             accessorKey: 'installationDate',
             sortable: true,
+            cell: (customer) => (
+                <div className="flex flex-col items-start justify-start gap-0.5">
+                    <span>
+                        {customer.installationDate
+                            ? moment(customer.installationDate).format('ll')
+                            : null}
+                    </span>
+                    <small>
+                        {customer.installationDate
+                            ? moment(customer.installationDate).fromNow()
+                            : null}
+                    </small>
+                </div>
+            ),
         },
         {
             key: 'last_service_date',
             header: 'Last Service Date',
             accessorKey: 'lastServiceDate',
             sortable: true,
+            cell: (customer) => (
+                <div className="flex flex-col items-start justify-start gap-0.5">
+                    <span>
+                        {customer.lastServiceDate
+                            ? moment(customer.lastServiceDate).format('ll')
+                            : null}
+                    </span>
+                    <small>
+                        {customer.lastServiceDate
+                            ? moment(customer.lastServiceDate).fromNow()
+                            : null}
+                    </small>
+                </div>
+            ),
         },
         {
             key: 'next_service_date',
             header: 'Next Service Date',
             accessorKey: 'nextServiceDate',
             sortable: true,
+            cell: (customer) => (
+                <div className="flex flex-col items-start justify-start gap-0.5">
+                    <span>
+                        {customer.nextServiceDate
+                            ? moment(customer.nextServiceDate).format('ll')
+                            : null}
+                    </span>
+                    <small>
+                        {customer.nextServiceDate
+                            ? moment(customer.nextServiceDate).fromNow()
+                            : null}
+                    </small>
+                </div>
+            ),
         },
         {
             key: 'actions',

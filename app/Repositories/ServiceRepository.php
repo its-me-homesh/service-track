@@ -57,7 +57,7 @@ class ServiceRepository implements ServiceRepositoryInterface
     public function update(Service $service, array $data): ?Service
     {
         $service->update($data);
-        return $service->fresh();
+        return $service;
     }
 
     public function delete(Service $service, bool $hardDelete = false): bool

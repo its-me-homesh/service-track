@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { format, parseISO } from "date-fns"
+import { format, parse, parseISO, isValid } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -37,8 +37,25 @@ export function DatePicker({
   const [open, setOpen] = React.useState(false)
   const selectedDate = React.useMemo(() => {
     if (!value) return undefined
-    const parsed = parseISO(value)
-    return Number.isNaN(parsed.getTime()) ? undefined : parsed
+    const trimmed = value.trim()
+    if (!trimmed) return undefined
+
+    const isoParsed = parseISO(trimmed)
+    if (isValid(isoParsed)) {
+      return isoParsed
+    }
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+      const parsed = parse(trimmed, "yyyy-MM-dd", new Date())
+      return isValid(parsed) ? parsed : undefined
+    }
+
+    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(trimmed)) {
+      const parsed = parse(trimmed, "yyyy-MM-dd HH:mm:ss", new Date())
+      return isValid(parsed) ? parsed : undefined
+    }
+
+    return undefined
   }, [value])
 
   return (
@@ -85,6 +102,7 @@ export function DatePicker({
         <Calendar
           mode="single"
           selected={selectedDate}
+          defaultMonth={selectedDate}
           onSelect={(date) => {
             onChange(date ? format(date, "yyyy-MM-dd") : "")
             setOpen(false)

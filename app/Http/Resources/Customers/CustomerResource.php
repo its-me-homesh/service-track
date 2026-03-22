@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Customers;
 
 use App\Http\Resources\Services\ServiceCollection;
+use App\Http\Resources\Services\ServiceResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,6 +34,7 @@ class CustomerResource extends JsonResource
             'deletedAt' => $this->deleted_at?->format('Y-m-d H:i:s'),
             'services' => $this->whenLoaded('services'),
             'recentServices' => $this->whenLoaded('recentServices', fn() => ServiceCollection::make($this->recentServices)->resolve()),
+            'lastService' => $this->whenLoaded('lastService', fn() => ServiceResource::make($this->lastService)->resolve()),
         ];
     }
 }

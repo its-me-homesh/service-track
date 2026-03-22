@@ -20,6 +20,7 @@ import { Customer, type CustomerFormData } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { Info } from 'lucide-react';
 import { useEffect, type FormEvent } from 'react';
+import { DatePicker } from '@/components/ui/date-picker';
 
 const initialFormData: CustomerFormData = {
     name: '',
@@ -141,7 +142,7 @@ export default function CustomerFormCard({
                 </div>
                 {data.advanceServiceSettings && (
                     <div className="mt-1 flex flex-col gap-2 rounded-sm border-2 p-2">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div>
                                 <Label
                                     htmlFor="lastServiceDate"
@@ -181,20 +182,16 @@ export default function CustomerFormCard({
                                         </Tooltip>
                                     </div>
                                 </Label>
-                                <Input
-                                    className="mt-1"
+                                <DatePicker
+                                    className='mt-1'
                                     id="lastServiceDate"
                                     name="lastServiceDate"
-                                    tabIndex={11}
                                     placeholder="Select Last Service Date"
-                                    type="date"
                                     value={data.lastServiceDate}
-                                    onChange={(e) =>
-                                        setData(
-                                            'lastServiceDate',
-                                            e.target.value,
-                                        )
+                                    onChange={(value) =>
+                                        setData('lastServiceDate', value)
                                     }
+                                    error={errors.lastServiceDate}
                                 />
                                 <InputError message={errors.lastServiceDate} />
                             </div>
@@ -203,20 +200,15 @@ export default function CustomerFormCard({
                                     <Label htmlFor="nextServiceDate">
                                         Next Service Date*
                                     </Label>
-                                    <Input
+                                    <DatePicker
                                         id="nextServiceDate"
                                         name="nextServiceDate"
-                                        tabIndex={12}
-                                        required
                                         placeholder="Select Next Service Date*"
-                                        type="date"
                                         value={data.nextServiceDate}
-                                        onChange={(e) =>
-                                            setData(
-                                                'nextServiceDate',
-                                                e.target.value,
-                                            )
+                                        onChange={(value) =>
+                                            setData('nextServiceDate', value)
                                         }
+                                        error={errors.nextServiceDate}
                                     />
                                     <InputError
                                         message={errors.nextServiceDate}
@@ -341,17 +333,15 @@ export default function CustomerFormCard({
                             <Label htmlFor="installationDate">
                                 Installation Date*
                             </Label>
-                            <Input
+                            <DatePicker
                                 id="installationDate"
                                 name="installationDate"
-                                required
-                                tabIndex={7}
                                 placeholder="Select Installation Date*"
-                                type="date"
                                 value={data.installationDate}
-                                onChange={(e) =>
-                                    setData('installationDate', e.target.value)
+                                onChange={(value) =>
+                                    setData('installationDate', value)
                                 }
+                                error={errors.installationDate}
                             />
                             <InputError message={errors.installationDate} />
                         </div>

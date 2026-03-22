@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Services;
 
+use App\Enums\ServiceStatus;
 use App\Http\Resources\Customers\CustomerResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,6 +26,11 @@ class ServiceResource extends JsonResource
             'notes' => $this->notes,
             'cost' => $this->cost,
             'status' => $this->status,
+            'statusDetail' => [
+                'value' => $this->status,
+                'color' => ServiceStatus::from($this->status)->color(),
+                'label' => ServiceStatus::from($this->status)->label(),
+            ],
             'createdAt' => $this->created_at->format('Y-m-d H:i:s'),
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return $this->createdBy->only(['id', 'name']);

@@ -14,6 +14,7 @@ import { useForm } from '@inertiajs/react';
 import { Info } from 'lucide-react';
 import { useEffect, type FormEvent } from 'react';
 import { cn } from '@/lib/utils';
+import { DatePicker } from '@/components/ui/date-picker';
 
 const initialFormData: CustomerAdvancedServiceSettingsFormData = {
     customerId: null,
@@ -97,17 +98,15 @@ export default function CustomerAdvancedServiceSettingsForm({
                             >
                                 Last Service Date
                             </Label>
-                            <Input
-                                className="mt-1"
+                            <DatePicker
                                 id="lastServiceDate"
                                 name="lastServiceDate"
-                                tabIndex={8}
                                 placeholder="Select Last Service Date"
-                                type="date"
                                 value={data.lastServiceDate}
-                                onChange={(e) =>
-                                    setData('lastServiceDate', e.target.value)
+                                onChange={(value) =>
+                                    setData('lastServiceDate', value)
                                 }
+                                error={errors.lastServiceDate}
                             />
                             {errors.lastServiceDate && (
                                 <small className="text-red-500">
@@ -149,19 +148,15 @@ export default function CustomerAdvancedServiceSettingsForm({
                                 <Label htmlFor="nextServiceDate">
                                     Next Service Date
                                 </Label>
-                                <Input
+                                <DatePicker
                                     id="nextServiceDate"
                                     name="nextServiceDate"
-                                    tabIndex={9}
                                     placeholder="Select Next Service Date"
-                                    type="date"
                                     value={data.nextServiceDate}
-                                    onChange={(e) =>
-                                        setData(
-                                            'nextServiceDate',
-                                            e.target.value,
-                                        )
+                                    onChange={(value) =>
+                                        setData('nextServiceDate', value)
                                     }
+                                    error={errors.nextServiceDate}
                                 />
                                 {errors.nextServiceDate && (
                                     <small className="text-red-500">
