@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Service;
 use App\Repositories\Contracts\ServiceRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
@@ -69,5 +70,30 @@ class ServiceRepository implements ServiceRepositoryInterface
     public function restore(Service $service): bool
     {
         return $service->restore();
+    }
+
+    public function active(bool $count = false, array $params = [], bool $trashed = false): Collection|int
+    {
+        $with = $params['with'] ?? [];
+        $query = Service::active()
+            ->when($trashed, fn($q) => $q->withTrashed())
+            ->when(!blank($with), fn($q) => $q->with($with));
+        return $count ? $query->count() : $query->get();
+    }
+
+    public function today(bool $count = false, array $params = [], bool $trashed = false): Collection|int
+    {
+        $with = $params['with'] ?? [];
+        $query = Service::whereDate('service_date', now()->format('Y-m-d'))
+            ->when($trashed, fn($q) => $q->withTrashed())
+            ->when(!blank($with), fn($q) => $q->with($with));
+        return $count ? $query->count() : $query->get();
+    }
+
+    public function completedThisMonthCount(bool $trashed = false): int
+    {
+        return Service::whereMonth('updated_at', now()->month)
+            ->when($trashed, fn($q) => $q->withTrashed())
+            ->count();
     }
 }

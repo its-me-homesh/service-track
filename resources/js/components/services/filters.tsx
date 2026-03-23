@@ -15,9 +15,11 @@ const statusToggleClasses: Record<
 > = {
     amber: 'data-[state=on]:bg-amber-100 data-[state=on]:text-amber-600',
     blue: 'data-[state=on]:bg-blue-100 data-[state=on]:text-blue-600',
+    sky: 'data-[state=on]:bg-sky-100 data-[state=on]:text-sky-600',
     violet: 'data-[state=on]:bg-violet-100 data-[state=on]:text-violet-600',
     orange: 'data-[state=on]:bg-orange-100 data-[state=on]:text-orange-600',
-    green: 'data-[state=on]:bg-emerald-100 data-[state=on]:text-emerald-600',
+    green: 'data-[state=on]:bg-green-100 data-[state=on]:text-green-600',
+    emerald: 'data-[state=on]:bg-emerald-100 data-[state=on]:text-emerald-600',
     red: 'data-[state=on]:bg-red-100 data-[state=on]:text-red-600',
 };
 

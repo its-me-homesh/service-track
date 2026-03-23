@@ -38,10 +38,10 @@ enum ServiceStatus: string
     {
         return match ($this) {
             self::PENDING => 'amber',
-            self::IN_PROGRESS => 'blue',
+            self::IN_PROGRESS => 'sky',
             self::ON_HOLD => 'violet',
             self::RESCHEDULED => 'orange',
-            self::COMPLETED => 'green',
+            self::COMPLETED => 'emerald',
             self::CANCELLED => 'red',
         };
     }

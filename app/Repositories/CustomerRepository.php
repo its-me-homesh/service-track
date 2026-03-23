@@ -101,4 +101,27 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         return Customer::when($trashed, fn($q) => $q->withTrashed())->find($id);
     }
+
+    public function count(bool $trashed = false): int
+    {
+        return Customer::when($trashed, fn($q) => $q->withTrashed())->count();
+    }
+
+    public function serviceOverdue(bool $count = false, array $params = [], bool $trashed = false): Collection | int
+    {
+        $with = $params['with'] ?? [];
+        $query = Customer::where('next_service_date', ">=", now())
+            ->when($trashed, fn($q) => $q->withTrashed())
+            ->when(!blank($with), fn($q) => $q->with($with));
+        return $count ? $query->count() : $query->get();
+    }
+
+    public function serviceUpcoming(bool $count = false, array $params = [], bool $trashed = false): Collection | int
+    {
+        $with = $params['with'] ?? [];
+        $query = Customer::whereBetween('next_service_date', [now()->subDays(60), now()->addDays(60)]) //fix this
+            ->when($trashed, fn($q) => $q->withTrashed())
+            ->when(!blank($with), fn($q) => $q->with($with));
+        return $count ? $query->count() : $query->get();
+    }
 }

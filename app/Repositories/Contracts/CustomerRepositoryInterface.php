@@ -23,4 +23,10 @@ interface CustomerRepositoryInterface
     public function restore(Customer $customer): bool;
 
     public function findByIdOrNull(int $id, bool $trashed = false): ?Customer;
+
+    public function count(bool $trashed = false): int;
+
+    public function serviceOverdue(bool $count = false, array $params = [], bool $trashed = false): Collection|int;
+
+    public function serviceUpcoming(bool $count = false, array $params = [], bool $trashed = false): Collection|int;
 }

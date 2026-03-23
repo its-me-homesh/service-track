@@ -106,9 +106,17 @@ export interface ServiceCounts {
     completed: number;
 }
 export interface DashboardProps {
-    serviceDueInNextSevenDaysCustomers: Customer[];
+    counts: {
+        totalCustomers: number;
+        activeServices: number;
+        serviceOverdueCustomers: number;
+        todayServices: number;
+        serviceUpcomingCustomers: number;
+        completedThisMonthServices: number;
+    };
     serviceOverdueCustomers: Customer[];
-    serviceCounts: ServiceCounts;
+    serviceUpcomingCustomers: Customer[];
+    activeServices: Service[];
     [key: string]: unknown;
 }
 
@@ -181,9 +189,11 @@ export interface ServiceStatus {
     color?:
         | 'amber'
         | 'blue'
+        | 'sky'
         | 'violet'
         | 'orange'
         | 'green'
+        | 'emerald'
         | 'red';
     [key: string]: unknown;
 }

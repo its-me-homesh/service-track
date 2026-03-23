@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ServiceStatus;
 use App\Observers\ServiceObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -58,6 +59,16 @@ class Service extends Model
                 )
             )
         );
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            ServiceStatus::PENDING->value,
+            ServiceStatus::IN_PROGRESS->value,
+            ServiceStatus::ON_HOLD->value,
+            ServiceStatus::RESCHEDULED->value
+        ]);
     }
 
     public function customer(): BelongsTo

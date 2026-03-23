@@ -4,6 +4,7 @@ namespace App\Repositories\Contracts;
 
 use App\Models\Service;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 interface ServiceRepositoryInterface
 {
@@ -18,4 +19,10 @@ interface ServiceRepositoryInterface
     public function delete(Service $service, bool $hardDelete = false): bool;
 
     public function restore(Service $service): bool;
+
+    public function active(bool $count = false, array $params = [], bool $trashed = false): Collection|int;
+
+    public function today(bool $count = false, array $params = [], bool $trashed = false): Collection|int;
+
+    public function completedThisMonthCount(bool $trashed = false): int;
 }

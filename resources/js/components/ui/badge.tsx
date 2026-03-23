@@ -31,17 +31,21 @@ const badgeVariants = cva(
 const badgeColorClasses: Record<
   | "amber"
   | "blue"
+  | "sky"
   | "violet"
   | "orange"
   | "green"
+  | "emerald"
   | "red",
   string
 > = {
   amber: "bg-amber-100 text-amber-600 border-none",
   blue: "bg-blue-100 text-blue-600 border-none",
+  sky: "bg-sky-100 text-sky-600 border-none",
   violet: "bg-violet-100 text-violet-600 border-none",
   orange: "bg-orange-100 text-orange-600 border-none",
-  green: "bg-emerald-100 text-emerald-600 border-none",
+  green: "bg-green-100 text-green-600 border-none",
+    emerald: "bg-emerald-100 text-emerald-600 border-none",
   red: "bg-red-100 text-red-600 border-none",
 }
 

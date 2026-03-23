@@ -20,9 +20,7 @@ class ServiceCollection extends ResourceCollection
         return $this->collection->map(fn($service) => [
             'id' => $service->id,
             'customerId' => $service->customer_id,
-            'customer' => $service->whenLoaded('customer', fn() => new CustomerResource(
-                $service->customer
-            )),
+            'customer' => $service->whenLoaded('customer', fn () => CustomerResource::make($service->customer)->resolve()),
             'serviceDate' => $service->service_date,
             'notes' => $service->notes,
             'cost' => $service->cost,
