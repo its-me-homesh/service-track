@@ -119,7 +119,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     public function serviceUpcoming(bool $count = false, array $params = [], bool $trashed = false): Collection | int
     {
         $with = $params['with'] ?? [];
-        $query = Customer::whereBetween('next_service_date', [now()->subDays(60), now()->addDays(60)]) //fix this
+        $query = Customer::whereBetween('next_service_date', [now(), now()->addDays(6)])
             ->when($trashed, fn($q) => $q->withTrashed())
             ->when(!blank($with), fn($q) => $q->with($with));
         return $count ? $query->count() : $query->get();

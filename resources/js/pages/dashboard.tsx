@@ -35,7 +35,7 @@ export default function Dashboard({
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     <Link
-                        href="customers"
+                        href="/customers"
                         className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                     >
                         <div className="flex flex-col items-center justify-center justify-self-center">
@@ -54,7 +54,7 @@ export default function Dashboard({
                     </Link>
 
                     <Link
-                        href="/services?status=assigned"
+                        href="/services?status[]=pending&status[]=in_progress&status[]=on_hold&status[]=rescheduled"
                         className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                     >
                         <div className="flex flex-col items-center justify-center justify-self-center">
@@ -73,7 +73,7 @@ export default function Dashboard({
                     </Link>
 
                     <Link
-                        href="/services?status=in_progress"
+                        href="/customers?serviceOverdue=true"
                         className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                     >
                         <div className="flex flex-col items-center justify-center justify-self-center">
@@ -92,7 +92,7 @@ export default function Dashboard({
                     </Link>
 
                     <Link
-                        href="/services?status=completed"
+                        href="/services"
                         className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                     >
                         <div className="flex flex-col items-center justify-center justify-self-center">
@@ -111,7 +111,7 @@ export default function Dashboard({
                     </Link>
 
                     <Link
-                        href="/customers?status=due"
+                        href="/customers?serviceDue=true"
                         className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                     >
                         <div className="flex flex-col items-center justify-center justify-self-center">
@@ -129,7 +129,7 @@ export default function Dashboard({
                         </div>
                     </Link>
                     <Link
-                        href="/services?status=overdue"
+                        href="/services?status[]=completed"
                         className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                     >
                         <div className="flex flex-col items-center justify-center justify-self-center">
