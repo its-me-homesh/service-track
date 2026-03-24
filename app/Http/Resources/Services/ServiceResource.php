@@ -4,6 +4,7 @@ namespace App\Http\Resources\Services;
 
 use App\Enums\ServiceStatus;
 use App\Http\Resources\Customers\CustomerResource;
+use App\Http\Resources\ServiceHistories\ServiceHistoryCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,9 +20,7 @@ class ServiceResource extends JsonResource
         return [
             'id' => $this->id,
             'customerId' => $this->customer_id,
-            'customer' => $this->whenLoaded('customer', function () {
-                return new CustomerResource($this->customer);
-            }),
+            'customer' => $this->whenLoaded('customer', fn() => CustomerResource::make($this->customer)->resolve()),
             'serviceDate' => $this->service_date,
             'notes' => $this->notes,
             'cost' => $this->cost,
@@ -43,6 +42,7 @@ class ServiceResource extends JsonResource
             'deletedBy' => $this->whenLoaded('deletedBy', function () {
                 return $this->deletedBy->only(['id', 'name']);
             }),
+            'histories' => $this->whenLoaded('histories', fn () => ServiceHistoryCollection::make($this->histories)->resolve()),
         ];
     }
 }

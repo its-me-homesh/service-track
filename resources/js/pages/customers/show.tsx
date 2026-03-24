@@ -111,7 +111,9 @@ export default function CustomerDetails({
                             ? moment(service.createdAt).format('lll')
                             : null}
                     </span>
-                    <small>{service?.createdBy?.name}</small>
+                    {service.createdBy && (
+                        <small>by {service.createdBy.name}</small>
+                    )}
                 </div>
             ),
         },
@@ -126,7 +128,9 @@ export default function CustomerDetails({
                             ? moment(service.updatedAt).format('lll')
                             : null}
                     </span>
-                    <small>{service?.updatedBy?.name}</small>
+                    {service.updatedBy && (
+                        <small>by {service.updatedBy.name}</small>
+                    )}
                 </div>
             ),
         },

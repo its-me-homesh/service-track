@@ -135,7 +135,7 @@ export default function ServiceDetailsCard({
                         </div>
                         <div className="flex items-end gap-0.5">
                             {service.updatedBy && (
-                                <small>{service.updatedBy.name}</small>
+                                <small>by {service.updatedBy.name}</small>
                             )}
                         </div>
                     </dd>

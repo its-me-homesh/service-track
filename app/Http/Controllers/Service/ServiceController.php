@@ -19,7 +19,7 @@ use Inertia\Inertia;
 class ServiceController extends Controller
 {
 
-    public function __construct(private ServiceManagementService $serviceManagementService)
+    public function __construct(private readonly ServiceManagementService $serviceManagementService)
     {
     }
 
@@ -46,8 +46,10 @@ class ServiceController extends Controller
     {
         $service = $this->serviceManagementService->findById($id);
         $this->authorize(ServicePermission::VIEW->value, $service);
+
+        $service->loadMissing(['customer', 'createdBy', 'updatedBy', 'histories.createdBy']);
         return Inertia::render('services/show',[
-            'service' => ServiceResource::make($service)->resolve()
+            'service' => ServiceResource::make($service)->resolve(),
         ]);
     }
 

@@ -180,6 +180,26 @@ export interface Service {
     deletedById: number;
     deletedBy: User | null;
     statusDetail?: ServiceStatus;
+    histories?: ServiceHistory[];
+    [key: string]: unknown;
+}
+
+export interface ServiceHistory {
+    id: number;
+    serviceId: number;
+    service?: Service | null;
+    eventType: string;
+    description: string;
+    changes: {
+        [key: string]: {
+            old: string;
+            new: string;
+        };
+    };
+    createdAt: string;
+    createdById: number;
+    createdBy: User | null;
+    updatedAt: string;
     [key: string]: unknown;
 }
 

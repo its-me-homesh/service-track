@@ -8,7 +8,7 @@ import {
 import { Head, router, usePage } from '@inertiajs/react';
 
 import { Pagination } from '@/components/ui/Pagination/pagination';
-import { Mail, MapPin, NotebookPen } from 'lucide-react';
+import { Mail, MapPin, NotebookPen, Phone } from 'lucide-react';
 
 import {
     HoverCard,
@@ -112,6 +112,14 @@ export default function Services({
                         </div>
                     </HoverCardTrigger>
                     <HoverCardContent className="w-64 space-y-2">
+                        {service?.customer?.alternateContactNumber && (
+                            <div className="flex items-center gap-2">
+                                <Phone className="h-4 w-4 shrink-0" />
+                                <span className="text-sm break-all">
+                                    {service?.customer?.alternateContactNumber}
+                                </span>
+                            </div>
+                        )}
                         {service?.customer?.email && (
                             <div className="flex items-center gap-2">
                                 <Mail className="h-4 w-4 shrink-0" />
@@ -188,7 +196,9 @@ export default function Services({
                             ? moment(service.createdAt).format('lll')
                             : null}
                     </span>
-                    <small>{service?.createdBy?.name}</small>
+                    {service.createdBy && (
+                        <small>by {service.createdBy.name}</small>
+                    )}
                 </div>
             ),
         },
@@ -204,7 +214,9 @@ export default function Services({
                             ? moment(service.updatedAt).format('lll')
                             : null}
                     </span>
-                    <small>{service?.updatedBy?.name}</small>
+                    {service.updatedBy && (
+                        <small>by {service.updatedBy.name}</small>
+                    )}
                 </div>
             ),
         },
