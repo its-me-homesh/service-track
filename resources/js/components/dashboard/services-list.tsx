@@ -11,11 +11,18 @@ import {
 } from '@/components/ui/tooltip';
 import { Service } from '@/types';
 import { Link } from '@inertiajs/react';
-import { ExternalLink, Eye, Mail, MapPin, NotebookPen } from 'lucide-react';
+import { ExternalLink, Mail, MapPin, NotebookPen } from 'lucide-react';
 import moment from 'moment';
 import { Badge } from '@/components/ui/badge';
+import ActionsDropdown from '@/components/services/actions-dropdown';
 
-export default function ServicesList({ data }: { data: Service[] }) {
+type Props = {
+    onOpenServiceForm?: (service: Service) => void;
+    onOpenStatusForm?: (service: Service) => void;
+    data: Service[];
+};
+
+export default function ServicesList({ onOpenServiceForm, onOpenStatusForm, data }: Props) {
     const columns: DataTableColumn<Service>[] = [
         {
             key: 'name',
@@ -83,9 +90,7 @@ export default function ServicesList({ data }: { data: Service[] }) {
             header: 'Status',
             accessorKey: 'status',
             cell: (service) => (
-                <Badge
-                    color={service.statusDetail?.color}
-                >
+                <Badge color={service.statusDetail?.color}>
                     {service.statusDetail?.label}
                 </Badge>
             ),
@@ -94,9 +99,11 @@ export default function ServicesList({ data }: { data: Service[] }) {
             key: 'view',
             header: 'view',
             cell: (service) => (
-                <Link href={`/services/${service.id}`}>
-                    <Eye className="h-4 w-4 text-sky-600 hover:text-sky-300" />
-                </Link>
+                <ActionsDropdown
+                    service={service}
+                    onOpenForm={onOpenServiceForm}
+                    onOpenStatusForm={onOpenStatusForm}
+                />
             ),
         },
     ];
@@ -113,7 +120,7 @@ export default function ServicesList({ data }: { data: Service[] }) {
                             className="flex items-center justify-end gap-2 text-sm text-sky-600 uppercase"
                         >
                             <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                     <ExternalLink className="h-4 w-4" />
                                 </TooltipTrigger>
                                 <TooltipContent>

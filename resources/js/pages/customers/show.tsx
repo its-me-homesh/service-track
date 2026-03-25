@@ -3,7 +3,7 @@ import { index as customersIndex } from '@/routes/customers';
 import { type BreadcrumbItem, Customer, Service, ServiceStatus } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 
-import { ExternalLink } from 'lucide-react';
+import { CalendarPlus, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { index as servicesIndex } from '@/routes/services';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -178,10 +178,17 @@ export default function CustomerDetails({
                             context="details"
                         />
                         <Button
-                            variant="default"
+                            variant="secondary"
                             onClick={() => handleOpenServiceForm()}
                         >
-                            Add Service
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CalendarPlus className="h-4 w-4" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    Click to add a new service.
+                                </TooltipContent>
+                            </Tooltip>
                         </Button>
                     </div>
 
@@ -239,7 +246,7 @@ export default function CustomerDetails({
                                         className="flex items-center justify-end gap-2 text-sm text-sky-600 uppercase"
                                     >
                                         <Tooltip>
-                                            <TooltipTrigger>
+                                            <TooltipTrigger asChild>
                                                 <ExternalLink className="h-4 w-4" />
                                             </TooltipTrigger>
                                             <TooltipContent>

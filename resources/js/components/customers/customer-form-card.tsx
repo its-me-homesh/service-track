@@ -130,7 +130,7 @@ export default function CustomerFormCard({
                         Advanced Service Settings
                     </Label>
                     <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger asChild>
                             <Info className="h-4 w-4" />
                         </TooltipTrigger>
                         <TooltipContent>
@@ -170,7 +170,7 @@ export default function CustomerFormCard({
                                             Auto-calculate Next Service Date
                                         </Label>
                                         <Tooltip>
-                                            <TooltipTrigger>
+                                            <TooltipTrigger asChild>
                                                 <Info className="h-4 w-4" />
                                             </TooltipTrigger>
                                             <TooltipContent>
@@ -183,7 +183,7 @@ export default function CustomerFormCard({
                                     </div>
                                 </Label>
                                 <DatePicker
-                                    className='mt-1'
+                                    className="mt-1"
                                     id="lastServiceDate"
                                     name="lastServiceDate"
                                     placeholder="Select Last Service Date"

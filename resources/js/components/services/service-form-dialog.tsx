@@ -124,6 +124,8 @@ export default function ServiceFormDialog({
 
     const showCustomerSelect = !customer && !selectedService;
 
+    const selectedCustomer = customer || (selectedService?.customer as Customer);
+
     return (
         <Dialog open={open} onOpenChange={handleDialogOpenChange}>
             <DialogContent className={className}>
@@ -156,6 +158,82 @@ export default function ServiceFormDialog({
                                         allowClear
                                     />
                                     <InputError message={errors.customerId} />
+                                </div>
+                            )}
+                            {selectedCustomer && (
+                                <div>
+                                    <Label htmlFor="customerId">Customer</Label>
+                                    <div className="flex flex-col items-start space-x-2">
+                                        <div className="flex items-center space-x-2">
+                                            <div className="font-medium">
+                                                {selectedCustomer.name}
+                                            </div>
+                                        </div>
+                                        <div className="mt-1 flex flex-col items-start gap-0.5">
+                                            <div className="flex items-start justify-between gap-5">
+                                                <div className="flex flex-col justify-start gap-0.5">
+                                                    <small className="text-xs font-bold text-muted-foreground uppercase">
+                                                        Contact Number:
+                                                    </small>
+                                                    <span className="text-xs">
+                                                        {
+                                                            selectedCustomer.contactNumber
+                                                        }
+                                                    </span>
+                                                </div>
+                                                <div className="flex flex-col justify-start gap-0.5">
+                                                    <small className="text-xs font-bold text-muted-foreground uppercase">
+                                                        Last Service Date:
+                                                    </small>
+                                                    <span className="text-xs">
+                                                        {
+                                                            selectedCustomer.lastServiceDate
+                                                        }
+                                                    </span>
+                                                </div>
+                                                <div className="flex flex-col justify-start gap-0.5">
+                                                    <small className="text-xs font-bold text-muted-foreground uppercase">
+                                                        Next Service Date:
+                                                    </small>
+                                                    <span className="text-xs">
+                                                        {
+                                                            selectedCustomer.nextServiceDate
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mt-1 flex flex-col items-start gap-0.5">
+                                            <div className="flex items-start justify-start gap-0.5">
+                                                <div className="flex flex-col justify-start gap-0.5">
+                                                    <small className="text-xs font-bold text-muted-foreground uppercase">
+                                                        Address:
+                                                    </small>
+                                                    <span className="text-xs">
+                                                        {
+                                                            selectedCustomer.address
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {selectedCustomer.notes && (
+                                            <div className="mt-1 flex flex-col items-start gap-0.5">
+                                                <div className="flex items-start justify-start gap-0.5">
+                                                    <div className="flex flex-col justify-start gap-0.5">
+                                                        <small className="text-xs font-bold text-muted-foreground uppercase">
+                                                            Notes/remarks:
+                                                        </small>
+                                                        <span className="text-xs">
+                                                            {
+                                                                selectedCustomer.notes
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
                             <div>

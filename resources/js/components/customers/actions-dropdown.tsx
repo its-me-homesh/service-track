@@ -15,6 +15,7 @@ import { Customer } from '@/types';
 import { Link, router } from '@inertiajs/react';
 import {
     ArchiveRestore,
+    CalendarClock,
     EllipsisIcon,
     Eraser,
     Eye,
@@ -25,10 +26,12 @@ import {
 export default function ActionsDropdown({
     customer,
     onFormOpen,
+    onServiceFormOpen,
     context = 'table',
 }: {
     customer: Customer;
     onFormOpen?: (customer: Customer) => void;
+    onServiceFormOpen?: (customer: Customer) => void;
     context?: 'table' | 'details';
 }) {
     const handleDelete = async (type: 'soft' | 'permanent' = 'soft') => {
@@ -101,6 +104,17 @@ export default function ActionsDropdown({
                                 </span>
                             </DropdownMenuItem>
                         )}
+                    {onServiceFormOpen && !customer.deletedAt && (
+                        <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => onServiceFormOpen(customer)}
+                        >
+                            <span className="flex items-center gap-2 text-teal-500">
+                                <CalendarClock className="h-5 w-5 text-teal-500" />
+                                <span>Add Service</span>
+                            </span>
+                        </DropdownMenuItem>
+                    )}
 
                     {!customer.deletedAt && (
                         <DropdownMenuItem

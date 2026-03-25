@@ -117,6 +117,7 @@ export interface DashboardProps {
     serviceOverdueCustomers: Customer[];
     serviceUpcomingCustomers: Customer[];
     activeServices: Service[];
+    serviceStatuses: ServiceStatus[];
     [key: string]: unknown;
 }
 

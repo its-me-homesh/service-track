@@ -9,17 +9,26 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Customer } from '@/types';
+import { Customer, ServiceStatus } from '@/types';
 import { Link } from '@inertiajs/react';
-import { ExternalLink, Eye, Mail, MapPin, NotebookPen } from 'lucide-react';
+import { ExternalLink, Mail, MapPin, NotebookPen } from 'lucide-react';
 import moment from 'moment';
+import ActionsDropdown from '@/components/customers/actions-dropdown';
+
+type Props = {
+    context: 'overdue' | 'upcoming';
+    onOpenCustomerForm?: (customer?: Customer) => void;
+    onOpenServiceForm?: (customer?: Customer) => void;
+    statuses: ServiceStatus[];
+    data: Customer[];
+};
 
 export default function CustomerDueServicesList({
-                                                    context = 'overdue',
-                                                    data }: {
-    context: 'overdue' | 'upcoming',
-    data: Customer[]
-}) {
+    context = 'overdue',
+    onOpenCustomerForm,
+    onOpenServiceForm,
+    data,
+}: Props) {
     const columns: DataTableColumn<Customer>[] = [
         {
             key: 'name',
@@ -103,12 +112,14 @@ export default function CustomerDueServicesList({
             ),
         },
         {
-            key: 'view',
-            header: 'view',
+            key: 'actions',
+            header: 'Actions',
             cell: (customer) => (
-                <Link href={`/customers/${customer.id}`}>
-                    <Eye className="h-4 w-4 text-sky-600 hover:text-sky-300" />
-                </Link>
+                <ActionsDropdown
+                    customer={customer}
+                    onFormOpen={onOpenCustomerForm}
+                    onServiceFormOpen={onOpenServiceForm}
+                />
             ),
         },
     ];
@@ -129,7 +140,7 @@ export default function CustomerDueServicesList({
                             className="flex items-center justify-end gap-2 text-sm text-sky-600 uppercase"
                         >
                             <Tooltip>
-                                <TooltipTrigger>
+                                <TooltipTrigger asChild>
                                     <ExternalLink className="h-4 w-4" />
                                 </TooltipTrigger>
                                 <TooltipContent>

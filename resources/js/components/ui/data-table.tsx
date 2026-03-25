@@ -167,7 +167,7 @@ export function DataTable<T>({
                                   })}
                               </tr>
                           ))
-                        : emptyState && (
+                        : emptyState ? (
                               <tr>
                                   <td
                                       colSpan={columns.length}
@@ -176,7 +176,14 @@ export function DataTable<T>({
                                       {emptyState}
                                   </td>
                               </tr>
-                          )}
+                          ) : <tr>
+                            <td
+                                colSpan={columns.length}
+                                className="px-2 py-4 text-center text-sm text-muted-foreground"
+                            >
+                                No data found.
+                            </td>
+                        </tr>}
                 </tbody>
             </table>
         </div>

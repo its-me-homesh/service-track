@@ -2,11 +2,22 @@ import AppLayout from '@/layouts/app-layout';
 import {
     index as customersIndex,
 } from '@/routes/customers';
-import { type BreadcrumbItem, Customer, PaginatedData } from '@/types';
+import {
+    type BreadcrumbItem,
+    Customer,
+    PaginatedData,
+    ServiceStatus,
+} from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 
 import { Pagination } from '@/components/ui/Pagination/pagination';
-import { Mail, MapPin, NotebookPen } from 'lucide-react';
+import {
+    CalendarPlus,
+    Mail,
+    MapPin,
+    NotebookPen,
+    UserRoundPlus,
+} from 'lucide-react';
 
 import {
     HoverCard,
@@ -26,6 +37,12 @@ import ActionsDropdown from '@/components/customers/actions-dropdown';
 import CustomerFormCard from '@/components/customers/customer-form-card';
 import Filters from '@/components/customers/filters';
 import moment from 'moment/moment';
+import ServiceFormDialog from '@/components/services/service-form-dialog';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,33 +53,43 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Customers({
     customers,
+    serviceStatuses,
 }: {
     customers: PaginatedData<Customer>;
+    serviceStatuses: ServiceStatus[];
 }) {
     const { data, meta } = customers;
     const { url } = usePage();
     const params = new URLSearchParams(url.split('?')[1]);
 
-    const [customerFormOpened, setCustomerFormOpened] = useState<boolean>(false);
+    const [customerFormOpened, setCustomerFormOpened] =
+        useState<boolean>(false);
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
         null,
     );
 
-    const handleCustomerFormOpen = (customer?: Customer) => {
+    const [serviceFormOpened, setServiceFormOpened] = useState<boolean>(false);
+
+    const handleOpenServiceForm = (customer?: Customer) => {
         setSelectedCustomer(customer ?? null);
-        setCustomerFormOpened(true);
+        setServiceFormOpened(true);
+    };
+
+    const handleCloseServiceForm = () => {
+        setSelectedCustomer(null);
+        setServiceFormOpened(false);
     };
 
     const handleOpenCustomerForm = (customer?: Customer) => {
         setSelectedCustomer(customer ?? null);
         setCustomerFormOpened(true);
-    }
+    };
 
     const handleCloseCustomerForm = () => {
         setSelectedCustomer(null);
         setCustomerFormOpened(false);
-    }
+    };
 
     const sortableKeys = new Set([
         'contact_number',
@@ -197,7 +224,8 @@ export default function Customers({
             cell: (customer) => (
                 <ActionsDropdown
                     customer={customer}
-                    onFormOpen={handleCustomerFormOpen}
+                    onFormOpen={handleOpenCustomerForm}
+                    onServiceFormOpen={handleOpenServiceForm}
                 />
             ),
         },
@@ -245,12 +273,32 @@ export default function Customers({
                         )}
                         {!customerFormOpened && (
                             <Button
-                                variant="default"
+                                variant="secondary"
                                 onClick={() => handleOpenCustomerForm()}
                             >
-                                Add New Customer
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <UserRoundPlus className="h-4 w-4" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Click to add a new customer.
+                                    </TooltipContent>
+                                </Tooltip>
                             </Button>
                         )}
+                        <Button
+                            variant="secondary"
+                            onClick={() => handleOpenServiceForm()}
+                        >
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CalendarPlus className="h-4 w-4" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    Click to add a new service.
+                                </TooltipContent>
+                            </Tooltip>
+                        </Button>
                     </div>
 
                     {customerFormOpened && (
@@ -258,6 +306,17 @@ export default function Customers({
                             <CustomerFormCard
                                 onClose={handleCloseCustomerForm}
                                 selectedCustomer={selectedCustomer}
+                            />
+                        </div>
+                    )}
+                    {serviceFormOpened && (
+                        <div className="mt-2 px-1">
+                            <ServiceFormDialog
+                                open={serviceFormOpened}
+                                onClose={handleCloseServiceForm}
+                                onOpenChange={setServiceFormOpened}
+                                statuses={serviceStatuses}
+                                customer={selectedCustomer}
                             />
                         </div>
                     )}

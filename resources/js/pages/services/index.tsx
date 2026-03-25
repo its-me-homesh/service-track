@@ -8,7 +8,7 @@ import {
 import { Head, router, usePage } from '@inertiajs/react';
 
 import { Pagination } from '@/components/ui/Pagination/pagination';
-import { Mail, MapPin, NotebookPen, Phone } from 'lucide-react';
+import { CalendarPlus, Mail, MapPin, NotebookPen, Phone } from 'lucide-react';
 
 import {
     HoverCard,
@@ -31,6 +31,7 @@ import ServiceFormDialog from '@/components/services/service-form-dialog';
 import { Badge } from '@/components/ui/badge';
 import ChangeStatusFormDialog from '@/components/services/change-status-form-dialog';
 import moment from 'moment';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -266,10 +267,17 @@ export default function Services({
                 <div className="relative flex-1 overflow-hidden">
                     <div className="flex items-center justify-end gap-2 px-1 py-1">
                         <Button
-                            variant="default"
+                            variant="secondary"
                             onClick={() => handleOpenServiceForm()}
                         >
-                            Add New Service
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CalendarPlus className="h-4 w-4" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    Click to add a new service.
+                                </TooltipContent>
+                            </Tooltip>
                         </Button>
                     </div>
 
