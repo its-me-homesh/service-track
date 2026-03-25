@@ -33,6 +33,30 @@ class Customer extends Model
         'deleted_by_id',
     ];
 
+    public const SORTABLE_COLUMNS = [
+        'id',
+        'name',
+        'contact_number',
+        'alternate_contact_number',
+        'email',
+        'address',
+        'product_model',
+        'installation_date',
+        'last_service_date',
+        'next_service_date',
+        'created_at',
+        'updated_at',
+    ];
+
+    public const ALLOWED_INCLUDES = [
+        'createdBy',
+        'updatedBy',
+        'deletedBy',
+        'services',
+        'recentServices',
+        'lastService',
+    ];
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_id');
@@ -60,6 +84,6 @@ class Customer extends Model
 
     public function lastService(): HasOne
     {
-        return $this->hasOne(Service::class)->latest('updated_at');
+        return $this->hasOne(Service::class)->latestOfMany('updated_at');
     }
 }

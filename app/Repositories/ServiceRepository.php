@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\ServiceStatus;
 use App\Models\Service;
 use App\Repositories\Contracts\ServiceRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -84,7 +85,7 @@ class ServiceRepository implements ServiceRepositoryInterface
     public function today(bool $count = false, array $params = [], bool $trashed = false): Collection|int
     {
         $with = $params['with'] ?? [];
-        $query = Service::whereDate('service_date', now()->format('Y-m-d'))
+        $query = Service::whereDate('service_date', now()->toDateString())
             ->when($trashed, fn($q) => $q->withTrashed())
             ->when(!blank($with), fn($q) => $q->with($with));
         return $count ? $query->count() : $query->get();
@@ -92,7 +93,11 @@ class ServiceRepository implements ServiceRepositoryInterface
 
     public function completedThisMonthCount(bool $trashed = false): int
     {
-        return Service::whereMonth('updated_at', now()->month)
+        return Service::whereBetween('updated_at', [
+            now()->startOfMonth(),
+            now()->endOfMonth()
+        ])
+            ->where('status', ServiceStatus::COMPLETED->value)
             ->when($trashed, fn($q) => $q->withTrashed())
             ->count();
     }
