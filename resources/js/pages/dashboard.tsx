@@ -162,13 +162,13 @@ export default function Dashboard({
                                 className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                             >
                                 <div className="flex flex-col items-center justify-center justify-self-center">
-                                    <div className="flex flex-row items-center justify-center text-violet-500">
-                                        <p className="ml-2 text-4xl font-bold">
+                                    <div className="flex flex-row items-center justify-center">
+                                        <p className="font-bold text-violet-500 text-4xl">
                                             {counts.totalCustomers || 0}
                                         </p>
                                     </div>
-                                    <div className="mt-4 flex items-center justify-center gap-2 text-gray-600 dark:text-gray-200">
-                                        <Contact className="ml-2 h-6 w-6" />
+                                    <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
+                                        <Contact className="h-5 w-5" />
                                         <p className="text-center text-xs font-bold uppercase">
                                             Total Customers
                                         </p>
@@ -181,13 +181,13 @@ export default function Dashboard({
                                 className="rounded-sm bg-sidebar-accent p-6 text-sm font-bold text-sidebar-accent-foreground"
                             >
                                 <div className="flex flex-col items-center justify-center justify-self-center">
-                                    <div className="flex flex-row items-center justify-center text-sky-500">
-                                        <p className="ml-2 text-4xl font-bold">
+                                    <div className="flex flex-row items-center justify-center">
+                                        <p className="text-4xl font-bold text-sky-500">
                                             {counts.activeServices || 0}
                                         </p>
                                     </div>
-                                    <div className="mt-4 flex items-center justify-center gap-2 text-gray-600 dark:text-gray-200">
-                                        <CalendarClock />
+                                    <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
+                                        <CalendarClock className="h-5 w-5" />
                                         <p className="text-center text-xs uppercase">
                                             Active Services
                                         </p>
@@ -201,13 +201,12 @@ export default function Dashboard({
                             >
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center">
-                                        <p className="ml-2 text-4xl font-bold text-red-500">
-                                            {counts.serviceOverdueCustomers ||
-                                                0}
+                                        <p className="text-4xl font-bold text-red-500">
+                                            {counts.serviceOverdueCustomers || 0}
                                         </p>
                                     </div>
-                                    <div className="mt-4 flex items-center justify-center gap-2 text-gray-600 dark:text-gray-200">
-                                        <CalendarX2 className="ml-2 h-6 w-6" />
+                                    <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
+                                        <CalendarX2 className="h-5 w-5" />
                                         <p className="text-center text-xs uppercase">
                                             Overdue Services
                                         </p>
@@ -221,12 +220,12 @@ export default function Dashboard({
                             >
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center">
-                                        <p className="ml-2 text-4xl font-bold text-yellow-500">
+                                        <p className="text-4xl font-bold text-yellow-500">
                                             {counts.todayServices || 0}
                                         </p>
                                     </div>
-                                    <div className="mt-4 flex items-center justify-center gap-2 text-gray-600 dark:text-gray-200">
-                                        <Calendar1 className="h-4 w-4" />
+                                    <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
+                                        <Calendar1 className="h-5 w-5" />
                                         <p className="text-center text-xs uppercase">
                                             Today Services
                                         </p>
@@ -240,13 +239,12 @@ export default function Dashboard({
                             >
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center text-amber-500">
-                                        <p className="ml-2 text-4xl font-bold">
-                                            {counts.serviceUpcomingCustomers ||
-                                                0}
+                                        <p className="text-4xl font-bold">
+                                            {counts.serviceUpcomingCustomers || 0}
                                         </p>
                                     </div>
-                                    <div className="mt-4 flex items-center justify-center gap-2 text-gray-600 dark:text-gray-200">
-                                        <CalendarRange className="ml-2 h-6 w-6" />
+                                    <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
+                                        <CalendarRange className="h-5 w-5" />
                                         <p className="text-center text-xs font-bold uppercase">
                                             Due Services in Next 7 Days
                                         </p>
@@ -259,13 +257,12 @@ export default function Dashboard({
                             >
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center text-emerald-500">
-                                        <p className="ml-2 text-4xl font-bold">
-                                            {counts.completedThisMonthServices ||
-                                                0}
+                                        <p className="text-4xl font-bold">
+                                            {counts.completedThisMonthServices || 0}
                                         </p>
                                     </div>
-                                    <div className="mt-4 flex items-center justify-center gap-2 text-gray-600 dark:text-gray-200">
-                                        <CalendarCheck2 className="ml-2 h-6 w-6" />
+                                    <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
+                                        <CalendarCheck2 className="h-5 w-5" />
                                         <p className="text-center text-xs font-bold uppercase">
                                             Completed Services this month
                                         </p>
