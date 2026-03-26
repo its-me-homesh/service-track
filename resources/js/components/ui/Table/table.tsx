@@ -47,7 +47,7 @@ function TableRowItem({
     >
         {
             headers.map((header: TableHeader<object>, hIndex) => {
-                const value = (item as any)[header.key] || (item as any)[header.label];
+                const value = (item as never)[header.key] || (item as never)[header.label];
                 if (hIndex === 0) {
                     return (
                         <th

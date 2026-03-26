@@ -1,4 +1,3 @@
-import { Icon } from '@/components/icon';
 import {
     SidebarGroup,
     SidebarGroupContent,
@@ -6,7 +5,6 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { resolveUrl } from '@/lib/utils';
 import { type NavItem } from '@/types';
 import { type ComponentPropsWithoutRef } from 'react';
 import { Link } from '@inertiajs/react';
