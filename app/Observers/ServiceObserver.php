@@ -17,16 +17,16 @@ class ServiceObserver
         $model->updated_by_id = auth()->id();
     }
 
-    public function deleting(Service $type): void
+    public function deleting(Service $model): void
     {
-        if (!$type->isForceDeleting()) {
-            $type->deleted_by_id = auth()->id();
-            $type->saveQuietly();
+        if (!$model->isForceDeleting()) {
+            $model->deleted_by_id = auth()->id();
+            $model->saveQuietly();
         }
     }
 
-    public function restoring(Service $type): void
+    public function restoring(Service $model): void
     {
-        $type->deleted_by_id = null;
+        $model->deleted_by_id = null;
     }
 }

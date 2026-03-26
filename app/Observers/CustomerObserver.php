@@ -17,16 +17,16 @@ class CustomerObserver
         $model->updated_by_id = auth()->id();
     }
 
-    public function deleting(Customer $type): void
+    public function deleting(Customer $model): void
     {
-        if (!$type->isForceDeleting()) {
-            $type->deleted_by_id = auth()->id();
-            $type->saveQuietly();
+        if (!$model->isForceDeleting()) {
+            $model->deleted_by_id = auth()->id();
+            $model->saveQuietly();
         }
     }
 
-    public function restoring(Customer $type): void
+    public function restoring(Customer $model): void
     {
-        $type->deleted_by_id = null;
+        $model->deleted_by_id = null;
     }
 }
