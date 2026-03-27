@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Customer;
+namespace App\Http\Requests\User;
 
-use App\Enums\ModelDeleteType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class DeleteRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +23,19 @@ class DeleteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => [
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'roles' => ['required', 'array'],
+            'roles.*' => ['integer'],
+
+            'changePassword' => 'nullable', 'boolean',
+            'password' => [
                 'nullable',
                 'string',
-                Rule::in(ModelDeleteType::values())
+                Rule::requiredIf(
+                    fn() => $this->boolean('changePassword')
+                )
             ],
         ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'type' => $this->type ?? ModelDeleteType::SOFT_DELETE->value,
-        ]);
     }
 }

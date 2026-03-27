@@ -177,19 +177,20 @@ export default function CustomerDetails({
                             customer={customer}
                             context="details"
                         />
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleOpenServiceForm()}
-                        >
-                            <Tooltip>
-                                <TooltipTrigger asChild>
+
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => handleOpenServiceForm()}
+                                >
                                     <CalendarPlus className="h-4 w-4" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    Click to add a new service.
-                                </TooltipContent>
-                            </Tooltip>
-                        </Button>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Click to add a new service.
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
 
                     <div className="mt-2 px-1">

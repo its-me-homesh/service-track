@@ -245,3 +245,54 @@ type CustomerOption = {
     id: number;
     name: string;
 };
+
+export interface Role {
+    id: number;
+    name: string;
+    guardName?: string;
+    createdAt: string;
+    updatedAt: string;
+    permissions: Permission[];
+}
+
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    roles: Role[];
+    createdAt: string;
+    createdById: number;
+    createdBy: User | null;
+    updatedAt: string;
+    updatedById: number;
+    updatedBy: User | null;
+    deletedAt: string;
+    deletedById: number;
+    deletedBy: User | null;
+    [key: string]: unknown;
+}
+
+export interface UserFormData {
+    name: string;
+    email: string;
+    changePassword: boolean;
+    password: string;
+    roles: number[];
+}
+
+export interface UserFilters {
+    includeTrashed: boolean;
+    onlyTrashed: boolean;
+    roles: number[];
+}
+
+export interface Permission {
+    id: number;
+    name: string;
+    [key: string]: unknown;
+}
+
+export interface RoleFormData {
+    name: string;
+    permissions: number[];
+}

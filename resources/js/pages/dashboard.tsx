@@ -97,33 +97,34 @@ export default function Dashboard({
                 <div className="relative flex-1 overflow-hidden">
                     <div className="flex items-center justify-end gap-2 px-1 py-1">
                         {!customerFormOpened && (
-                            <Button
-                                variant="secondary"
-                                onClick={() => handleOpenCustomerForm()}
-                            >
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <UserRoundPlus className="h-4 w-4" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        Click to add a new customer.
-                                    </TooltipContent>
-                                </Tooltip>
-                            </Button>
-                        )}
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleOpenServiceForm()}
-                        >
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <CalendarPlus className="h-4 w-4" />
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => handleOpenCustomerForm()}
+                                    >
+                                        <UserRoundPlus className="h-4 w-4" />
+                                    </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    Click to add a new service.
+                                    Click to add a new customer.
                                 </TooltipContent>
                             </Tooltip>
-                        </Button>
+                        )}
+
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => handleOpenServiceForm()}
+                                >
+                                    <CalendarPlus className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Click to add a new service.
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                     {selectedService && statusFormOpened && (
                         <ChangeStatusFormDialog
@@ -163,7 +164,7 @@ export default function Dashboard({
                             >
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center">
-                                        <p className="font-bold text-violet-500 text-4xl">
+                                        <p className="text-4xl font-bold text-violet-500">
                                             {counts.totalCustomers || 0}
                                         </p>
                                     </div>
@@ -202,7 +203,8 @@ export default function Dashboard({
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center">
                                         <p className="text-4xl font-bold text-red-500">
-                                            {counts.serviceOverdueCustomers || 0}
+                                            {counts.serviceOverdueCustomers ||
+                                                0}
                                         </p>
                                     </div>
                                     <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
@@ -240,7 +242,8 @@ export default function Dashboard({
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center text-amber-500">
                                         <p className="text-4xl font-bold">
-                                            {counts.serviceUpcomingCustomers || 0}
+                                            {counts.serviceUpcomingCustomers ||
+                                                0}
                                         </p>
                                     </div>
                                     <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">
@@ -258,7 +261,8 @@ export default function Dashboard({
                                 <div className="flex flex-col items-center justify-center justify-self-center">
                                     <div className="flex flex-row items-center justify-center text-emerald-500">
                                         <p className="text-4xl font-bold">
-                                            {counts.completedThisMonthServices || 0}
+                                            {counts.completedThisMonthServices ||
+                                                0}
                                         </p>
                                     </div>
                                     <div className="mt-4 flex items-center justify-center gap-1 text-gray-600 dark:text-gray-200">

@@ -7,7 +7,8 @@ import {
 } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { type ComponentPropsWithoutRef } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
+import { resolveUrl } from '@/lib/utils';
 
 export function NavFooter({
     items,
@@ -16,6 +17,7 @@ export function NavFooter({
 }: ComponentPropsWithoutRef<typeof SidebarGroup> & {
     items: NavItem[];
 }) {
+    const page = usePage();
     return (
         <SidebarGroup
             {...props}
@@ -28,6 +30,9 @@ export function NavFooter({
                             <SidebarMenuButton
                                 asChild
                                 className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
+                                isActive={page.url.startsWith(
+                                    resolveUrl(item.href),
+                                )}
                             >
                                 <Link href={item.href} prefetch>
                                     {item.icon && <item.icon />}

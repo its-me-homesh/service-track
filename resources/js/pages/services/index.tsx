@@ -266,19 +266,19 @@ export default function Services({
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative flex-1 overflow-hidden">
                     <div className="flex items-center justify-end gap-2 px-1 py-1">
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleOpenServiceForm()}
-                        >
-                            <Tooltip>
-                                <TooltipTrigger asChild>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => handleOpenServiceForm()}
+                                >
                                     <CalendarPlus className="h-4 w-4" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    Click to add a new service.
-                                </TooltipContent>
-                            </Tooltip>
-                        </Button>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Click to add a new service.
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
 
                     {serviceFormOpened && (

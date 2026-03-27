@@ -272,33 +272,33 @@ export default function Customers({
                             </Button>
                         )}
                         {!customerFormOpened && (
-                            <Button
-                                variant="secondary"
-                                onClick={() => handleOpenCustomerForm()}
-                            >
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <UserRoundPlus className="h-4 w-4" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        Click to add a new customer.
-                                    </TooltipContent>
-                                </Tooltip>
-                            </Button>
-                        )}
-                        <Button
-                            variant="secondary"
-                            onClick={() => handleOpenServiceForm()}
-                        >
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <CalendarPlus className="h-4 w-4" />
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => handleOpenCustomerForm()}
+                                    >
+                                        <UserRoundPlus className="h-4 w-4" />
+                                    </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    Click to add a new service.
+                                    Click to add a new customer.
                                 </TooltipContent>
                             </Tooltip>
-                        </Button>
+                        )}
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => handleOpenServiceForm()}
+                                >
+                                    <CalendarPlus className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Click to add a new service.
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
 
                     {customerFormOpened && (

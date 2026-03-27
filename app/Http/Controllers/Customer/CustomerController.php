@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Customer;
 use App\Enums\ModelDeleteType;
 use App\Enums\Permissions\CustomerPermission;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Customer\DeleteRequest;
+use App\Http\Requests\Common\DeleteRequest;
+use App\Http\Requests\Customer\ListRequest;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Http\Requests\Customer\UpdateServiceScheduleRequest;
@@ -23,13 +24,13 @@ class CustomerController extends Controller
     {
     }
 
-    public function index()
+    public function index(ListRequest $request)
     {
         $this->authorize(CustomerPermission::VIEW_ANY->value, Customer::class);
-        $customers = new CustomerCollection($this->customerService->pagination(request()->all())->appends(request()->all()));
+        $validatedRequest = $request->validated();
 
         return Inertia::render('customers/index',[
-            'customers' => $customers
+            'customers' => new CustomerCollection($this->customerService->pagination($validatedRequest)->appends($validatedRequest))
         ]);
     }
 

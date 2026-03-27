@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Service;
 use App\Enums\ModelDeleteType;
 use App\Enums\Permissions\ServicePermission;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Service\DeleteRequest;
+use App\Http\Requests\Common\DeleteRequest;
 use App\Http\Requests\Service\ListRequest;
 use App\Http\Requests\Service\StoreRequest;
 use App\Http\Requests\Service\UpdateRequest;

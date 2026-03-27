@@ -10,12 +10,20 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, users } from '@/routes';
+import { dashboard } from '@/routes';
+import { index as usersIndex } from '@/routes/users';
+import { index as rolesIndex } from '@/routes/roles';
 import { index as servicesIndex } from '@/routes/services';
 import { index as customersIndex } from '@/routes/customers';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Contact, CalendarClock, UsersRound } from 'lucide-react';
+import {
+    LayoutGrid,
+    Contact,
+    CalendarClock,
+    UsersRound,
+    UserCheck,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -39,8 +47,13 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [
     {
         title: 'Users',
-        href: users(),
+        href: usersIndex(),
         icon: UsersRound,
+    },
+    {
+        title: 'Roles & Permissions',
+        href: rolesIndex(),
+        icon: UserCheck,
     },
 ];
 
