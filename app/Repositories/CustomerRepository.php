@@ -13,7 +13,7 @@ use Illuminate\Pagination\Paginator;
 class CustomerRepository implements CustomerRepositoryInterface
 {
     use HandlesDatabaseOperators;
-    
+
     public function search(array $params = []): Collection
     {
         $searchTerm = $params['term'] ?? '';
