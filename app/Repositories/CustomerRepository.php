@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\ServiceStatus;
 use App\Models\Customer;
+use App\Repositories\Concerns\HandlesDatabaseOperators;
 use App\Repositories\Contracts\CustomerRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,12 +12,17 @@ use Illuminate\Pagination\Paginator;
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
+    use HandlesDatabaseOperators;
+    
     public function search(array $params = []): Collection
     {
         $searchTerm = $params['term'] ?? '';
         $includeTrashed = $params['includeTrashed'] ?? false;
         $onlyTrashed = $params['onlyTrashed'] ?? false;
-        return Customer::when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], 'ilike', '%' . $searchTerm . '%'))
+
+        $likeOperator = $this->likeOperator();
+
+        return Customer::when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], $likeOperator, '%' . $searchTerm . '%'))
             ->when($includeTrashed, fn($query) => $query->withTrashed())
             ->when($onlyTrashed, fn($query) => $query->onlyTrashed())
             ->when(empty($searchTerm), fn($query) => $query->take(10))
@@ -39,11 +45,12 @@ class CustomerRepository implements CustomerRepositoryInterface
 
         $orderBy = in_array($orderBy, Customer::SORTABLE_COLUMNS, true) ? $orderBy : 'updated_at';
 
+        $likeOperator = $this->likeOperator();
 
         Paginator::currentPageResolver(fn() => $page);
 
         return Customer::query()
-            ->when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], 'ilike', '%' . $searchTerm . '%'))
+            ->when($searchTerm, fn($query) => $query->whereAny(['name', 'contact_number', 'email'], $likeOperator, '%' . $searchTerm . '%'))
             ->when($includeTrashed, fn($q) => $q->withTrashed())
             ->when($onlyTrashed, fn($q) => $q->onlyTrashed())
             ->when($serviceOverdue, fn($q) => $q->where('next_service_date', '<=', now()->toDateString()))

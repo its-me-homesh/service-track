@@ -20,7 +20,7 @@ class UpdateServiceScheduleAction
     {
         $interval = $customer->service_interval ?? 365;
         $baseDateString = $data['lastServiceDate'] ?? $customer->installation_date ?? null;
-        if ($data['autoCalculateNextServiceDate']) {
+        if ($data['autoCalculateNextServiceDate'] ?? false) {
             $nextServiceDate = $this->nextServiceDateCalculator->calculate($interval, $baseDateString);
         } else {
             $nextServiceDate = $data['nextServiceDate'] ?? null;

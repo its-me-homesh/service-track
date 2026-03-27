@@ -3,12 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\Repositories\Concerns\HandlesDatabaseOperators;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
 class UserRepository implements UserRepositoryInterface
 {
+    use HandlesDatabaseOperators;
+
     public function paginate(array $params): LengthAwarePaginator
     {
         $searchTerm = $params['term'] ?? '';
@@ -24,10 +27,12 @@ class UserRepository implements UserRepositoryInterface
 
         $orderBy = in_array($orderBy, User::SORTABLE_COLUMNS, true) ? $orderBy : 'updated_at';
 
+        $likeOperator = $this->likeOperator();
+
         Paginator::currentPageResolver(fn() => $page);
 
         return User::query()
-            ->when($searchTerm, fn($query) => $query->whereAny(['name', 'email'], 'ilike', '%' . $searchTerm . '%'))
+            ->when($searchTerm, fn($query) => $query->whereAny(['name', 'email'], $likeOperator, '%' . $searchTerm . '%'))
             ->when($includeTrashed, fn($q) => $q->withTrashed())
             ->when($onlyTrashed, fn($q) => $q->onlyTrashed())
             ->when(!blank($with), fn($q) => $q->with($with))

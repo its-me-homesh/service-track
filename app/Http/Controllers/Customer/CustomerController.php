@@ -48,7 +48,7 @@ class CustomerController extends Controller
     {
         $this->authorize(CustomerPermission::CREATE->value, Customer::class);
         $this->customerService->create($request->validated());
-        return back('customers.index')
+        return back()
             ->with('success', 'Customer created successfully.');
     }
 

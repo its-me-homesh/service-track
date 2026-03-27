@@ -24,13 +24,14 @@ class UpdateServiceScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => [
+            'lastServiceDate' => 'nullable|date_format:Y-m-d',
+            'autoCalculateNextServiceDate' => 'nullable|boolean',
+            'nextServiceDate' => [
                 'nullable',
-                'string',
+                'date_format:Y-m-d',
                 Rule::requiredIf(
-                    fn () => $this->boolean('changeStatus')
+                    fn () => !$this->boolean('autoCalculateNextServiceDate')
                 ),
-                Rule::enum(ServiceStatus::class)
             ],
         ];
     }

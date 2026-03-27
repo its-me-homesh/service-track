@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ServiceStatus;
 use App\Observers\ServiceObserver;
+use App\Repositories\Concerns\HandlesDatabaseOperators;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Service extends Model
 {
     use SoftDeletes, HasFactory;
+    use HandlesDatabaseOperators;
 
     protected $fillable = [
         'customer_id',
@@ -52,10 +54,11 @@ class Service extends Model
 
     public function scopeSearch(Builder $query, ?string $searchTerm): Builder
     {
+        $likeOperator = $this->likeOperator();
         return $query->when($searchTerm, fn ($query) =>
-        $query->where(fn ($q) => $q->whereAny(['status', 'cost', 'service_date'], 'ilike', "%{$searchTerm}%")
+        $query->where(fn ($q) => $q->whereAny(['status', 'cost', 'service_date'], $likeOperator, "%{$searchTerm}%")
                 ->orWhereHas('customer', fn ($customerQuery) =>
-                    $customerQuery->whereAny(['name', 'contact_number', 'email'], 'ilike', "%{$searchTerm}%")
+                    $customerQuery->whereAny(['name', 'contact_number', 'email'], $likeOperator, "%{$searchTerm}%")
                 )
             )
         );

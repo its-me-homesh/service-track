@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Concerns\HandlesDatabaseOperators;
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Permission;
@@ -9,12 +10,16 @@ use Spatie\Permission\Models\Role;
 
 class RoleRepository implements RoleRepositoryInterface
 {
+    use HandlesDatabaseOperators;
+
     public function all(array $params): Collection
     {
         $searchTerm = $params['term'] ?? '';
         $with = $params['with'] ?? [];
 
-        return Role::when($searchTerm, fn($query) => $query->where('name', 'ilike', '%' . $searchTerm . '%'))
+        $likeOperator = $this->likeOperator();
+
+        return Role::when($searchTerm, fn($query) => $query->where('name', $likeOperator, '%' . $searchTerm . '%'))
             ->when(!blank($with), fn($q) => $q->with($with))
             ->get();
     }
